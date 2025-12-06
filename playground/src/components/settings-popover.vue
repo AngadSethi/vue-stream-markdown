@@ -10,7 +10,7 @@ import Select from './select.vue'
 import Switch from './switch.vue'
 import Tooltip from './tooltip.vue'
 
-const autoScroll = defineModel<boolean>('autoScroll', { required: false, default: true })
+const autoScroll = defineModel<boolean>('autoScroll', { required: false, default: false })
 const staticMode = defineModel<boolean>('staticMode', { required: false, default: false })
 const typedStep = defineModel<number>('typedStep', { required: false, default: 1 })
 const typedDelay = defineModel<number>('typedDelay', { required: false, default: 16 })

@@ -37,7 +37,7 @@ const typedEnable = ref<boolean>(false)
 const typedStep = computed(() => userConfig.value.typedStep)
 const typedDelay = computed(() => userConfig.value.typedDelay)
 
-const { typedContent, isTyping, prevStep, nextStep, terminate } = useTypedEffect({
+const { typedContent, isTyping, stop, prevStep, nextStep, terminate } = useTypedEffect({
   enabled: typedEnable,
   content,
   step: typedStep,
@@ -74,6 +74,11 @@ async function changePresetContent(item: SelectItem) {
     top: 0,
     behavior: 'instant',
   })
+}
+
+function stopTypeWriting() {
+  typedEnable.value = false
+  stop()
 }
 
 function terminateTypeWriting() {
@@ -137,7 +142,13 @@ initContent()
 </script>
 
 <template>
-  <Layout class="vue-stream-markdown">
+  <Layout
+    v-model:typed-enable="typedEnable"
+    v-model:show-input-editor="userConfig.showInputEditor"
+    v-model:show-ast-result="userConfig.showAstResult"
+    :stop="stopTypeWriting"
+    class="vue-stream-markdown"
+  >
     <template #actions>
       <div class="flex gap-4 items-center">
         <Title />
@@ -162,37 +173,33 @@ initContent()
         :toggle-language="toggleLanguage"
       />
     </template>
-    <div class="py-1 bg-background flex flex-col gap-2 w-full lg:flex-1 lg:flex-row">
-      <div
-        v-show="userConfig.showInputEditor"
-        class="border-r border-border flex-1 min-w-0 overflow-hidden"
-      >
-        <Monaco ref="monacoRef" :content="content" @change="onEditorChange" />
-      </div>
 
-      <div class="pl-4 border-r border-border flex-1 min-w-0 relative">
-        <ScrollTriggerGroup :get-container="getContainer">
-          <CopyButton :content="typedContent" />
-        </ScrollTriggerGroup>
+    <template #editor>
+      <Monaco ref="monacoRef" :content="content" @change="onEditorChange" />
+    </template>
 
-        <div ref="containerRef" class="scrollbar-gutter-stable pr-4 h-full overflow-auto">
-          <Markdown
-            ref="markdownRef"
-            class="flex flex-col gap-3"
-            :mode="mode"
-            :content="markdownContent"
-            :locale="locale"
-            :is-dark="isDark"
-            :shiki-options="shikiOptions"
-            :mermaid-options="mermaidOptions"
-          />
-        </div>
-      </div>
+    <template #markdown>
+      <ScrollTriggerGroup :get-container="getContainer">
+        <CopyButton :content="typedContent" />
+      </ScrollTriggerGroup>
 
-      <div v-if="userConfig.showAstResult" class="flex-1 min-w-0 overflow-auto">
-        <AstResult :parsed-nodes="parsedNodes" />
+      <div ref="containerRef" class="scrollbar-gutter-stable pr-4 h-full overflow-auto">
+        <Markdown
+          ref="markdownRef"
+          class="flex flex-col gap-3"
+          :mode="mode"
+          :content="markdownContent"
+          :locale="locale"
+          :is-dark="isDark"
+          :shiki-options="shikiOptions"
+          :mermaid-options="mermaidOptions"
+        />
       </div>
-    </div>
+    </template>
+
+    <template #ast>
+      <AstResult :parsed-nodes="parsedNodes" />
+    </template>
   </Layout>
 </template>
 

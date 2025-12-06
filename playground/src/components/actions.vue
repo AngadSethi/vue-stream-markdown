@@ -44,7 +44,7 @@ const { copy, copied } = useClipboard({
   legacy: true,
 })
 
-const staticMode = defineModel<boolean>('staticMode', { required: false, default: true })
+const staticMode = defineModel<boolean>('staticMode', { required: false, default: false })
 const autoScroll = defineModel<boolean>('autoScroll', { required: false, default: false })
 
 const typedEnable = defineModel<boolean>('typedEnable', { required: false, default: false })
@@ -166,7 +166,7 @@ const actions = computed((): Action[] => {
 </script>
 
 <template>
-  <div class="flex gap-1 max-sm:flex-col max-sm:w-full">
+  <div class="flex flex-wrap gap-1 max-sm:w-full max-sm:justify-center">
     <SettingsPopover
       v-model:auto-scroll="autoScroll"
       v-model:static-mode="staticMode"

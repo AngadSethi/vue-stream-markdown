@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IconButtonProps } from '../types'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { cn } from '../utils'
 import Tooltip from './tooltip.vue'
 
@@ -16,6 +16,14 @@ const emits = defineEmits<{
 
 const active = ref<boolean>(props.defaultActive)
 
+const buttonClass = computed(() => {
+  return cn(
+    'text-sm text-accent-foreground p-2 rounded-md flex-center gap-1 cursor-pointer transition-colors duration-150 duration-150 hover:bg-accent',
+    active.value ? 'bg-accent' : 'bg-transparent',
+    ...props.buttonClass,
+  )
+})
+
 function onClick(event: MouseEvent) {
   if (props.variant === 'toggle')
     active.value = !active.value
@@ -25,19 +33,26 @@ function onClick(event: MouseEvent) {
 
 <template>
   <Tooltip
+    v-if="name"
     append-to="parent"
     :content="name"
     :placement="placement"
   >
     <button
-      :class="cn(
-        'text-sm text-accent-foreground p-2 rounded-md flex-center gap-1 cursor-pointer transition-colors duration-150 duration-150 hover:bg-accent',
-        active ? 'bg-accent' : 'bg-transparent',
-        ...buttonClass)"
+      :class="buttonClass"
       type="button"
       @click="onClick"
     >
       <component :is="icon" :class="iconClass" />
     </button>
   </Tooltip>
+
+  <button
+    v-else
+    :class="buttonClass"
+    type="button"
+    @click="onClick"
+  >
+    <component :is="icon" :class="iconClass" />
+  </button>
 </template>

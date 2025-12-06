@@ -13,10 +13,8 @@ export const userConfig = useStorage<UserConfig>(
     typedDelay: 16,
     showInputEditor: true,
     showAstResult: false,
-
     shikiLightTheme: 'github-light',
     shikiDarkTheme: 'github-dark',
-
     mermaidLightTheme: 'neutral',
     mermaidDarkTheme: 'dark',
   }),
