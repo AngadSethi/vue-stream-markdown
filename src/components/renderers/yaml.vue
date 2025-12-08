@@ -29,10 +29,3 @@ const rows = computed(() => [{ children: data.value.map(line => line[1]) }])
     </Table>
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='yaml'] {
-  width: 100%;
-  overflow-x: auto;
-}
-</style>

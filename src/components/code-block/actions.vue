@@ -32,11 +32,3 @@ withDefaults(defineProps<{
     />
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='actions'] {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-</style>

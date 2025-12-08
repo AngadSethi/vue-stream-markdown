@@ -134,26 +134,3 @@ function getNodes(cell: unknown) {
     <Spin v-if="loading" />
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='table-wrapper'] {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-block: 1rem;
-}
-
-.stream-markdown [data-stream-markdown='table-controls'] {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 0.25rem;
-}
-
-.stream-markdown [data-stream-markdown='table-inner-wrapper'] {
-  width: 100%;
-  overflow-x: auto;
-}
-</style>

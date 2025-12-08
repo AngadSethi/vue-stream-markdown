@@ -106,37 +106,3 @@ function onWheel(event: WheelEvent) {
     </div>
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='zoom-container'] {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  touch-action: none;
-}
-
-.stream-markdown [data-stream-markdown='zoom-inner'] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-}
-
-.stream-markdown [data-stream-markdown='zoom-transform-container'] {
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.stream-markdown [data-stream-markdown='zoom-controls'] {
-  position: absolute;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
-}
-</style>

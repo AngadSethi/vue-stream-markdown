@@ -39,10 +39,3 @@ const component = computed(() => {
     :class="[languageClass]"
   />
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='code'],
-.stream-markdown [data-stream-markdown='code'] code {
-  font-family: var(--font-mono);
-}
-</style>

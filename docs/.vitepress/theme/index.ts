@@ -5,6 +5,7 @@ import './custom.css'
 import './markdown.css'
 import '@shared/assets/theme.css'
 import 'uno.css'
+import 'vue-stream-markdown/index.css'
 
 export default {
   extends: DefaultTheme,

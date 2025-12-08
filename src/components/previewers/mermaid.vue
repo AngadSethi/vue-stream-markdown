@@ -175,14 +175,3 @@ if (!props.containerHeight) {
     </ZoomContainer>
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='mermaid-previewer'] {
-  text-align: center;
-}
-.stream-markdown [data-stream-markdown='mermaid'] {
-  display: flex;
-  justify-content: center;
-  user-select: none;
-}
-</style>

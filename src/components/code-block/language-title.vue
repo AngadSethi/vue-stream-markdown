@@ -20,18 +20,3 @@ withDefaults(defineProps<{
     </span>
   </header>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='language-title'] {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.stream-markdown [data-stream-markdown='language-name'] {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  text-transform: lowercase;
-}
-</style>

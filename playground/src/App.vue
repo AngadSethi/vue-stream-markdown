@@ -16,6 +16,7 @@ import Title from './components/title.vue'
 import { isDark, userConfig, useTypedEffect } from './composable'
 import { DEFAULT_MARKDOWN_PATH, getPresetContent } from './markdown'
 import { getContentFromUrl } from './utils'
+import 'vue-stream-markdown/index.css'
 
 const { initTippy } = useTippy({
   isDark,
@@ -98,6 +99,9 @@ async function initContent() {
   catch (error) {
     console.error(error)
     content.value = await getPresetContent(DEFAULT_MARKDOWN_PATH)
+  }
+  finally {
+    monacoRef.value?.setValue(content.value)
   }
 }
 

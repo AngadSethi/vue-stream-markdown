@@ -10,11 +10,3 @@ const props = withDefaults(defineProps<ParagraphNodeRendererProps>(), {})
     <NodeList v-bind="props" :nodes="node.children" />
   </p>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='paragraph'] {
-  margin-bottom: 1rem;
-  vertical-align: middle;
-  transition: height var(--default-transition-duration) ease;
-}
-</style>

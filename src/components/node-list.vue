@@ -51,16 +51,3 @@ function getNodeIndexKey(index: number) {
     />
   </template>
 </template>
-
-<style>
-.stream-markdown .typewriter-enter-from {
-  opacity: 0;
-}
-.stream-markdown .typewriter-enter-active {
-  transition: opacity var(--typewriter-transition-duration) ease-out;
-  will-change: opacity;
-}
-.stream-markdown .typewriter-enter-to {
-  opacity: 1;
-}
-</style>

@@ -42,6 +42,7 @@ For detailed usage and API documentation, please refer to the [Documentation](ht
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import 'vue-stream-markdown/index.css'
 // If you don't have shadcn CSS variables globally, import the theme
 import 'vue-stream-markdown/theme.css'
 

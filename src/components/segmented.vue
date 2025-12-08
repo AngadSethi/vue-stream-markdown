@@ -47,13 +47,3 @@ function onClick(item: SelectItem) {
     />
   </div>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='segmented'] {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.125rem;
-  border-radius: 0.375rem;
-}
-</style>

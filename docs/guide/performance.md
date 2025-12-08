@@ -6,6 +6,7 @@ const codeBlockExample = `
 ${scriptTag}
 import { computed, ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import 'vue-stream-markdown/index.css'
 import 'vue-stream-markdown/theme.css'
 
 const content = ref('# Hello World\\n\\nThis is **streaming** content.')

@@ -56,9 +56,3 @@ function handleClick(event: MouseEvent, item: SelectItem) {
     <slot />
   </Tooltip>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='dropdown-overlay'] {
-  padding: 0.25rem;
-}
-</style>

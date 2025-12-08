@@ -32,20 +32,3 @@ const Error = computed(() => katexOptions.value?.errorComponent ?? ErrorComponen
     <div v-else data-stream-markdown="math" v-html="html" />
   </Transition>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='math'] {
-  text-align: center;
-  margin-block: 1rem;
-}
-
-.stream-markdown .math-enter-active,
-.stream-markdown .math-leave-active {
-  transition: opacity var (--default-transition-duration) ease;
-}
-
-.stream-markdown .math-enter-from,
-.stream-markdown .math-leave-to {
-  opacity: 0;
-}
-</style>

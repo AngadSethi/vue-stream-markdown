@@ -25,31 +25,14 @@ pnpm add katex
 
 ## Basic Usage
 
-The most basic usage is to import the `Markdown` component and pass the markdown content:
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue'
-import { Markdown } from 'vue-stream-markdown'
-// If you don't have shadcn CSS variables globally, import the theme
-import 'vue-stream-markdown/theme.css'
-
-const content = ref('# Hello World\n\nThis is a markdown content.')
-</script>
-
-<template>
-  <Markdown :content="content" />
-</template>
-```
-
-## Streaming Mode
-
 By default, the component runs in `streaming` mode, which is optimized for progressive content updates. You can also use `static` mode for complete markdown content:
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import 'vue-stream-markdown/index.css'
+// If you don't have shadcn CSS variables globally, import the theme
 import 'vue-stream-markdown/theme.css'
 
 const content = ref('# Hello World\n\nThis is a markdown content.')

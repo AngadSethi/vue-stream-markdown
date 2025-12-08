@@ -18,21 +18,3 @@ const id = computed(() => isTaskList.value
     <NodeList v-bind="props" :nodes="node.children" />
   </component>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='ordered-list'],
-.stream-markdown [data-stream-markdown='unordered-list'],
-.stream-markdown [data-stream-markdown='task-list'] {
-  padding-left: 1.25rem;
-  white-space: normal;
-}
-
-.stream-markdown [data-stream-markdown='ordered-list'] {
-  list-style-type: decimal;
-}
-
-.stream-markdown [data-stream-markdown='unordered-list'],
-.stream-markdown [data-stream-markdown='task-list'] {
-  list-style-type: disc;
-}
-</style>

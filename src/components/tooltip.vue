@@ -41,10 +41,3 @@ defineExpose({
     <slot />
   </Tippy>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='tooltip-overlay'] {
-  padding-block: 0.25rem;
-  padding-inline: 0.5rem;
-}
-</style>

@@ -10,9 +10,3 @@ const code = computed(() => props.node.value.trim())
 <template>
   <pre data-stream-markdown="code"><code translate="no" v-text="code" /></pre>
 </template>
-
-<style>
-.stream-markdown [data-stream-markdown='code'] {
-  padding: 1rem;
-}
-</style>
