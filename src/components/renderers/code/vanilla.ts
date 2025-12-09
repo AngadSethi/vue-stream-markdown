@@ -1,6 +1,7 @@
 import type { PropType } from 'vue'
 import type { CodeNodeRendererProps } from '../../../types'
-import { computed, defineComponent, h, renderList } from 'vue'
+import { computed, defineComponent, h, renderList, toRefs } from 'vue'
+import { useCodeOptions } from '../../../composables'
 
 export default defineComponent({
   name: 'VanillaRenderer',
@@ -15,13 +16,15 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { codeOptions } = toRefs(props)
+
     const code = computed(() => props.node.value.trim())
     const lang = computed(() => props.node.lang || '')
-    const showLineNumbers = computed(
-      () => typeof props.codeOptions?.lineNumbers === 'boolean'
-        ? props.codeOptions.lineNumbers
-        : true,
-    )
+
+    const { showLineNumbers } = useCodeOptions({
+      codeOptions,
+      language: lang,
+    })
     const lines = computed(() => code.value.split('\n'))
 
     return () => h(

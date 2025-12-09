@@ -4,7 +4,7 @@ import type { Component, CSSProperties } from 'vue'
 import type { CodeNodeRendererProps, SelectItem } from '../../types'
 import { useClipboard } from '@vueuse/core'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
-import { useContext, useControls, useI18n, useMermaid } from '../../composables'
+import { useCodeOptions, useContext, useControls, useI18n, useMermaid } from '../../composables'
 import {
   ICONS,
   LANGUAGE_ALIAS,
@@ -33,7 +33,7 @@ interface Action {
   onClick: (event: MouseEvent, item?: SelectItem) => void
 }
 
-const { controls, previewers } = toRefs(props)
+const { controls, previewers, codeOptions } = toRefs(props)
 
 const { t } = useI18n()
 
@@ -64,12 +64,11 @@ const language = computed((): BuiltinLanguage => {
   return lang as BuiltinLanguage
 })
 
-const showLanguageIcon = computed(() =>
-  typeof props.codeOptions?.languageIcon === 'boolean' ? props.codeOptions.languageIcon : true,
-)
-const showLanguageName = computed(() =>
-  typeof props.codeOptions?.languageName === 'boolean' ? props.codeOptions.languageName : true,
-)
+const { showLanguageIcon, showLanguageName } = useCodeOptions({
+  codeOptions,
+  language,
+})
+
 const showLanguageTitle = computed(() => showLanguageIcon.value || showLanguageName.value)
 
 const showCollapse = computed(() => isControlEnabled('code.collapse'))

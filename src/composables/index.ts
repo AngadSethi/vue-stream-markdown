@@ -1,3 +1,4 @@
+export * from './use-code-options'
 export * from './use-context'
 export * from './use-controls'
 export * from './use-harden-sanitizers'

@@ -322,6 +322,12 @@ Whether to display language names for code blocks.
 
 Whether to display line numbers for code blocks.
 
+#### language
+
+- **Type:** `Record<string, CodeOptions> | undefined`
+
+Language-specific code options. Allows you to override display options for specific programming languages. The keys should match the language identifiers used in code blocks (e.g., `'typescript'`, `'python'`, `'mermaid'`).
+
 ### imageOptions
 
 - **Type:** `ImageOptions`

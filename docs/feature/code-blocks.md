@@ -133,6 +133,36 @@ const codeOptions: CodeOptions = {
 
 All options default to `true` (visible). Set any option to `false` to hide the corresponding element.
 
+### Language-Specific Options
+
+You can configure different display options for specific programming languages using the `language` field:
+
+```vue
+<script setup lang="ts">
+import type { CodeOptions } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const codeOptions: CodeOptions = {
+  languageIcon: true,
+  languageName: true,
+  lineNumbers: true,
+  language: {
+    mermaid: {
+      languageIcon: false,
+      languageName: false,
+      lineNumbers: true,
+    },
+  },
+}
+</script>
+
+<template>
+  <Markdown :code-options="codeOptions" />
+</template>
+```
+
+This allows you to customize the display options per language, which is especially useful for mobile devices with limited width where you might want to hide language indicators to make room for preview/source toggle controls.
+
 ### Language Icons
 
 The language icons displayed in code blocks are provided by [Catppuccin](https://github.com/catppuccin/catppuccin). Special thanks to the Catppuccin team for their beautiful icon collection that enhances the visual experience of code blocks.

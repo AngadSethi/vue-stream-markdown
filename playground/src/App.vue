@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MermaidOptions, SelectItem, ShikiOptions } from 'vue-stream-markdown'
+import type { CodeOptions, MermaidOptions, SelectItem, ShikiOptions } from 'vue-stream-markdown'
 import { throttle } from '@antfu/utils'
 import { useCycleList, useResizeObserver } from '@vueuse/core'
 import { decompressFromEncodedURIComponent } from 'lz-string'
@@ -13,7 +13,7 @@ import Monaco from './components/monaco.vue'
 import PresetSelect from './components/preset-select.vue'
 import ScrollTriggerGroup from './components/scroll-trigger-group.vue'
 import Title from './components/title.vue'
-import { isDark, userConfig, useTypedEffect } from './composable'
+import { isDark, isMobile, userConfig, useTypedEffect } from './composable'
 import { DEFAULT_MARKDOWN_PATH, getPresetContent } from './markdown'
 import { getContentFromUrl } from './utils'
 import 'vue-stream-markdown/index.css'
@@ -60,6 +60,20 @@ const markdownContent = computed(() => mode.value === 'static' ? content.value :
 const shikiOptions = computed((): ShikiOptions => {
   return {
     theme: [userConfig.value.shikiLightTheme, userConfig.value.shikiDarkTheme],
+  }
+})
+
+const codeOptions = computed((): CodeOptions => {
+  const options: CodeOptions = {
+    languageIcon: !isMobile.value,
+    languageName: !isMobile.value,
+  }
+
+  return {
+    language: {
+      mermaid: options,
+      html: options,
+    },
   }
 })
 
@@ -213,6 +227,7 @@ initContent()
           :locale="locale"
           :is-dark="isDark"
           :shiki-options="shikiOptions"
+          :code-options="codeOptions"
           :mermaid-options="mermaidOptions"
         />
       </div>

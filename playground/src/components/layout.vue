@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { computed, watch } from 'vue'
+import { isMobile } from '../composable'
 
 const props = withDefaults(defineProps<{
   stop?: () => void
 }>(), {
   stop: () => {},
 })
-
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const isMobile = breakpoints.smaller('lg')
 
 const typedEnable = defineModel<boolean>('typedEnable', { required: false, default: false })
 const showInputEditor = defineModel<boolean>('showInputEditor', { required: false, default: false })

@@ -115,6 +115,18 @@ export interface CodeOptions {
   languageIcon?: boolean
   languageName?: boolean
   lineNumbers?: boolean
+  /**
+   * Language specific code options
+   * @example
+   * {
+   *   mermaid: {
+   *     languageIcon: false,
+   *     languageName: false,
+   *     lineNumbers: true,
+   *   },
+   * }
+   */
+  language?: Record<string, CodeOptions>
 }
 
 // https://github.com/vercel-labs/markdown-sanitizers

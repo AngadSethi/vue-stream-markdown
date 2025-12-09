@@ -2,7 +2,7 @@
 import type { TokensResult } from 'shiki'
 import type { CodeNodeRendererProps } from '../../../types'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
-import { useShiki } from '../../../composables'
+import { useCodeOptions, useShiki } from '../../../composables'
 import VanillaRenderer from './vanilla'
 
 const props = withDefaults(defineProps<CodeNodeRendererProps>(), {})
@@ -14,11 +14,10 @@ const ShikiTokensRenderer = defineAsyncComponent(() => import('./shiki-token-ren
 const code = computed(() => props.node.value.trim())
 const lang = computed(() => props.node.lang || '')
 
-const showLineNumbers = computed(
-  () => typeof codeOptions.value?.lineNumbers === 'boolean'
-    ? codeOptions.value.lineNumbers
-    : true,
-)
+const { showLineNumbers } = useCodeOptions({
+  codeOptions,
+  language: lang,
+})
 
 const { codeToTokens } = useShiki({
   lang,

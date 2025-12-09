@@ -65,6 +65,11 @@ interface CodeOptions {
   languageIcon?: boolean
   languageName?: boolean
   lineNumbers?: boolean
+  /**
+   * Language specific code options
+   * Allows you to override display options for specific programming languages
+   */
+  language?: Record<string, CodeOptions>
 }
 ```
 
@@ -106,6 +111,41 @@ Whether to display line numbers for code blocks. Line numbers are shown on the l
 ### All Options Enabled (Default)
 
 <StreamMarkdown :content="codeExample" :code-options="allEnabled" />
+
+### language
+
+- **Type:** `Record<string, CodeOptions> | undefined`
+- **Default:** `undefined`
+
+Language-specific code options. Allows you to override display options for specific programming languages. The keys should match the language identifiers used in code blocks (e.g., `'typescript'`, `'python'`, `'mermaid'`).
+
+**Example: Configure different options for Mermaid diagrams**
+
+```vue
+<script setup lang="ts">
+import type { CodeOptions } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const codeOptions: CodeOptions = {
+  languageIcon: true,
+  languageName: true,
+  lineNumbers: true,
+  language: {
+    mermaid: {
+      languageIcon: false,
+      languageName: false,
+      lineNumbers: true,
+    },
+  },
+}
+</script>
+
+<template>
+  <Markdown :content="content" :code-options="codeOptions" />
+</template>
+```
+
+In this example, all code blocks will show language icons, language names, and line numbers by default. However, Mermaid code blocks will only show line numbers, hiding the language icon and name.
 
 ### Usage Example
 
