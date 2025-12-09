@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   content?: string
   prevStep: () => void
   nextStep: () => void
+  toStep: (index: number) => void
   terminateTypeWriting: () => void
   toggleLanguage: () => void
 }>(), {
@@ -48,6 +49,7 @@ const staticMode = defineModel<boolean>('staticMode', { required: false, default
 const autoScroll = defineModel<boolean>('autoScroll', { required: false, default: false })
 
 const typedEnable = defineModel<boolean>('typedEnable', { required: false, default: false })
+const typingIndex = defineModel<number>('typingIndex', { required: false, default: 0 })
 const typedStep = defineModel<number>('typedStep', { required: false, default: 1 })
 const typedDelay = defineModel<number>('typedDelay', { required: false, default: 16 })
 
@@ -170,12 +172,14 @@ const actions = computed((): Action[] => {
     <SettingsPopover
       v-model:auto-scroll="autoScroll"
       v-model:static-mode="staticMode"
+      v-model:typing-index="typingIndex"
       v-model:typed-step="typedStep"
       v-model:typed-delay="typedDelay"
       v-model:shiki-light-theme="shikiLightTheme"
       v-model:shiki-dark-theme="shikiDarkTheme"
       v-model:mermaid-light-theme="mermaidLightTheme"
       v-model:mermaid-dark-theme="mermaidDarkTheme"
+      :to-step="toStep"
     />
 
     <IconButton

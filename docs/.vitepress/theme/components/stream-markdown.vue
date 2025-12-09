@@ -2,8 +2,10 @@
 import IconButton from '@shared/components/icon-button.vue'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useData } from 'vitepress'
-import { computed, defineComponent, h, ref, useAttrs } from 'vue'
+import { computed, ref, useAttrs } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import CirclePause from '~icons/lucide/circle-pause'
+import CirclePlay from '~icons/lucide/circle-play'
 
 const props = withDefaults(defineProps<{
   mode?: 'streaming' | 'static'
@@ -62,18 +64,6 @@ const name = computed(
     ? 'Stop Typing'
     : 'Start Typing',
 )
-
-const startIcon = defineComponent({
-  setup() {
-    return () => h('i', { class: 'i-lucide:circle-play' })
-  },
-})
-
-const stopIcon = defineComponent({
-  setup() {
-    return () => h('i', { class: 'i-lucide:circle-pause' })
-  },
-})
 
 function toggle() {
   if (mode.value === 'streaming') {
@@ -135,7 +125,7 @@ function cleanup() {
       <IconButton
         v-if="playable"
         :name="name"
-        :icon="mode === 'static' ? startIcon : stopIcon"
+        :icon="mode === 'static' ? CirclePlay : CirclePause"
         :button-class="['rounded-full', 'bg-background', 'p-1']"
         @click="() => toggle()"
       />

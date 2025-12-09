@@ -38,7 +38,16 @@ const typedEnable = ref<boolean>(false)
 const typedStep = computed(() => userConfig.value.typedStep)
 const typedDelay = computed(() => userConfig.value.typedDelay)
 
-const { typedContent, isTyping, stop, prevStep, nextStep, terminate } = useTypedEffect({
+const {
+  typedContent,
+  typingIndex,
+  isTyping,
+  stop,
+  prevStep,
+  nextStep,
+  toStep,
+  terminate,
+} = useTypedEffect({
   enabled: typedEnable,
   content,
   step: typedStep,
@@ -159,6 +168,7 @@ initContent()
         <PresetSelect @select="changePresetContent" />
       </div>
       <Actions
+        v-model:typing-index="typingIndex"
         v-model:static-mode="userConfig.staticMode"
         v-model:auto-scroll="userConfig.autoScroll"
         v-model:typed-enable="typedEnable"
@@ -173,6 +183,7 @@ initContent()
         :content="content"
         :prev-step="prevStep"
         :next-step="nextStep"
+        :to-step="toStep"
         :terminate-type-writing="terminateTypeWriting"
         :toggle-language="toggleLanguage"
       />

@@ -84,6 +84,12 @@ export function useTypedEffect(options: UseTypedEffectOptions) {
     prevContent.value = content.value.slice(0, typingIndex.value)
   }
 
+  function toStep(index: number) {
+    const value = Math.max(0, Math.min(content.value.length, index))
+    typingIndex.value = value
+    prevContent.value = content.value.slice(0, typingIndex.value)
+  }
+
   function stop() {
     isTyping.value = false
     intervalId.value && clearTimeout(intervalId.value)
@@ -97,9 +103,11 @@ export function useTypedEffect(options: UseTypedEffectOptions) {
 
   return {
     typedContent,
+    typingIndex,
     isTyping,
     prevStep,
     nextStep,
+    toStep,
     stop,
     terminate,
   }

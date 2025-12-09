@@ -10,8 +10,14 @@ import Select from './select.vue'
 import Switch from './switch.vue'
 import Tooltip from './tooltip.vue'
 
+const props = withDefaults(defineProps<{
+  toStep: (index: number) => void
+}>(), {})
+
 const autoScroll = defineModel<boolean>('autoScroll', { required: false, default: false })
 const staticMode = defineModel<boolean>('staticMode', { required: false, default: false })
+
+const typingIndex = defineModel<number>('typingIndex', { required: false, default: 0 })
 const typedStep = defineModel<number>('typedStep', { required: false, default: 1 })
 const typedDelay = defineModel<number>('typedDelay', { required: false, default: 16 })
 
@@ -34,7 +40,6 @@ const BLOCK_CLASSES = [
 const BLOCK_TITLE_CLASSES = [
   'font-semibold',
   'text-lg',
-  'h-8',
   'pl-2',
 ]
 
@@ -45,7 +50,7 @@ const LABEL_CLASSES = [
 ]
 
 const DIVIDER_CLASSES = [
-  'my-4',
+  'my-3',
   'border-border',
 ]
 
@@ -61,6 +66,10 @@ const MERMAID_THEMES: SelectItem[] = [
   { label: 'Neutral', value: 'neutral' },
   { label: 'Base', value: 'base' },
 ]
+
+function onTypingIndexChange() {
+  props.toStep(typingIndex.value)
+}
 
 watch(() => autoScroll.value, () => {
   if (autoScroll.value)
@@ -95,6 +104,11 @@ watch(() => staticMode.value, () => {
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Auto Scroll</Label>
           <Switch v-model:value="autoScroll" />
+        </div>
+
+        <div :class="BLOCK_CLASSES">
+          <Label :class="LABEL_CLASSES">Typing Index</Label>
+          <Input v-model:value="typingIndex" type="number" placeholder="Typing index" @change="onTypingIndexChange" />
         </div>
 
         <div :class="BLOCK_CLASSES">
