@@ -63,7 +63,7 @@ const shikiOptions = computed((): ShikiOptions => {
   return {
     theme: [userConfig.value.shikiLightTheme, userConfig.value.shikiDarkTheme],
     langAlias: {
-      echarts: 'sh',
+      echarts: 'json',
     },
   }
 })

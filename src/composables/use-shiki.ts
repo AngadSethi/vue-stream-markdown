@@ -29,7 +29,13 @@ export function useShiki(options?: UseShikiOptions) {
   const lightTheme = computed(() => shikiTheme.value[0] ?? DEFAULT_LIGHT_THEME)
   const darkTheme = computed(() => shikiTheme.value[1] ?? DEFAULT_DARK_THEME)
 
-  const langAlias = computed(() => unref(options?.shikiOptions)?.langAlias ?? {})
+  const langAlias = computed(() => {
+    const data = unref(options?.shikiOptions)?.langAlias ?? {}
+    return {
+      ...LANGUAGE_ALIAS,
+      ...data,
+    }
+  })
   const codeToTokenOptions = computed(() => unref(options?.shikiOptions)?.codeToTokenOptions ?? {})
 
   const isDark = computed(() => unref(options?.isDark) ?? false)
@@ -48,14 +54,15 @@ export function useShiki(options?: UseShikiOptions) {
   }
 
   async function getLanguage() {
-    if (LANGUAGE_ALIAS[lang.value])
-      return LANGUAGE_ALIAS[lang.value]
+    if (langAlias.value[lang.value])
+      return langAlias.value[lang.value]
 
     const { bundledLanguagesInfo } = await import('shiki')
     const language = bundledLanguagesInfo.find(l => l.id === lang.value || l.aliases?.includes(lang.value))
 
     if (language)
       return language.id
+
     return 'plaintext'
   }
 
@@ -88,10 +95,7 @@ export function useShiki(options?: UseShikiOptions) {
       return createHighlighter({
         themes: [await getTheme()],
         langs: [await getLanguage()],
-        langAlias: {
-          ...LANGUAGE_ALIAS,
-          ...langAlias.value,
-        },
+        langAlias: langAlias.value,
       })
     })()
 

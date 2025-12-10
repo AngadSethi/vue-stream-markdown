@@ -23,7 +23,7 @@ const emits = defineEmits<{
   (e: 'copied', content: string): void
 }>()
 
-const { isDark } = toRefs(props)
+const { shikiOptions, mermaidOptions, isDark } = toRefs(props)
 
 const containerRef = ref<HTMLDivElement>()
 
@@ -55,8 +55,12 @@ function getContainer(): HTMLElement | undefined {
   return containerRef.value
 }
 
-const { preload: preloadShiki, dispose: disposeShiki } = useShiki()
-const { preload: preloadMermaid, dispose: disposeMermaid } = useMermaid()
+const { preload: preloadShiki, dispose: disposeShiki } = useShiki({
+  shikiOptions,
+})
+const { preload: preloadMermaid, dispose: disposeMermaid } = useMermaid({
+  mermaidOptions,
+})
 const { preload: preloadKatex, dispose: disposeKatex } = useKatex()
 
 async function bootstrap() {
