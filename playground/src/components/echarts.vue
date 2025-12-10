@@ -7,6 +7,8 @@ import { COMMON_COMPONENTS } from 'vue-stream-markdown'
 
 const props = defineProps<CodeNodeRendererProps>()
 
+const { ErrorComponent } = COMMON_COMPONENTS
+
 const chartRef = ref<HTMLDivElement>()
 const chart = shallowRef<echarts.ECharts>()
 const code = computed(() => props.node.value.trim())
@@ -46,6 +48,6 @@ useResizeObserver(chartRef, () => {
 <template>
   <div>
     <div ref="chartRef" class="h-100" />
-    <COMMON_COMPONENTS.ErrorComponent v-if="hasError" />
+    <ErrorComponent v-if="hasError" />
   </div>
 </template>

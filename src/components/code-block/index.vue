@@ -111,7 +111,7 @@ const previewable = computed((): boolean => {
 
     // Custom previewer component, load when is completed
     const component = previewers.value[language.value]
-    if (typeof component === 'object')
+    if (typeof component === 'object' && !props.node.loading)
       return !!component
 
     return false
