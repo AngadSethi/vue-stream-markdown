@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { StreamMarkdownProps } from './types'
+import type { Component } from 'vue'
+import type { IconName, NodeRenderers, StreamMarkdownProps } from './types'
 import mediumZoom from 'medium-zoom'
 import { computed, onBeforeUnmount, ref, toRefs, watch } from 'vue'
 import NodeList from './components/node-list.vue'
 import { NODE_RENDERERS } from './components/renderers'
 import { useContext, useKatex, useMermaid, useShiki, useTippy } from './composables'
+import { ICONS } from './constants'
 import { loadLocaleMessages } from './locales'
 import { MarkdownParser } from './markdown-parser'
 import 'medium-zoom/dist/style.css'
@@ -13,6 +15,7 @@ const props = withDefaults(defineProps<StreamMarkdownProps>(), {
   mode: 'streaming',
   content: '',
   nodeRenderers: () => ({}),
+  icons: () => ({}),
   controls: true,
   previewers: true,
   isDark: false,
@@ -46,9 +49,14 @@ const markdownParser = new MarkdownParser({
 
 const parsedNodes = computed(() => markdownParser.parseMarkdown(props.content))
 
-const nodeRenderers = computed(() => ({
+const nodeRenderers = computed((): NodeRenderers => ({
   ...NODE_RENDERERS,
   ...props.nodeRenderers,
+}))
+
+const icons = computed((): Record<IconName, Component> => ({
+  ...ICONS,
+  ...props.icons,
 }))
 
 function getContainer(): HTMLElement | undefined {
@@ -79,6 +87,7 @@ watch(() => props.mode, () => markdownParser.updateMode(props.mode))
 watch(() => props.locale, () => loadLocaleMessages(props.locale))
 
 provideContext({
+  icons,
   isDark,
   getContainer,
   onCopied: (content: string) => {

@@ -6,7 +6,6 @@ import { useClipboard } from '@vueuse/core'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
 import { useCodeOptions, useContext, useControls, useI18n, useMermaid } from '../../composables'
 import {
-  ICONS,
   LANGUAGE_ALIAS,
   LANGUAGE_EXTENSIONS,
   LANGUAGE_ICONS,
@@ -36,6 +35,7 @@ interface Action {
 const { controls, previewers, codeOptions } = toRefs(props)
 
 const { t } = useI18n()
+const { icons } = useContext()
 
 const { isControlEnabled } = useControls({
   controls,
@@ -149,7 +149,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.collapse'),
       key: 'collapse',
-      icon: ICONS.collapse,
+      icon: icons.value.collapse,
       iconStyle: {
         transform: collapsed.value ? 'rotate(180deg)' : undefined,
         transition: 'transform var(--default-transition-duration)',
@@ -160,7 +160,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.copy'),
       key: 'copy',
-      icon: copied.value ? ICONS.check : ICONS.copy,
+      icon: copied.value ? icons.value.check : icons.value.copy,
       visible: () => showCopy.value,
       onClick: () => {
         if (!props.node.value)
@@ -172,7 +172,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.download'),
       key: 'download',
-      icon: ICONS.download,
+      icon: icons.value.download,
       options: downloadOptions.value.length > 0 ? downloadOptions.value : undefined,
       visible: () => showDownload.value && !!LANGUAGE_EXTENSIONS[language.value],
       onClick: (_event: MouseEvent, item?: SelectItem) => {
@@ -192,7 +192,7 @@ const actions = computed((): Action[] => {
     {
       name: fullscreen.value ? t('button.minimize') : t('button.maximize'),
       key: 'fullscreen',
-      icon: fullscreen.value ? ICONS.minimize : ICONS.maximize,
+      icon: fullscreen.value ? icons.value.minimize : icons.value.maximize,
       visible: () => showFullscreen.value,
       onClick: () => fullscreen.value = !fullscreen.value,
     },

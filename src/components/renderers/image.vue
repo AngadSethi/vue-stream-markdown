@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { ImageNodeRendererProps } from '../../types'
 import { computed, ref, toRefs } from 'vue'
-import { useControls, useHardenSanitizers, useI18n } from '../../composables'
-import { ICONS } from '../../constants'
+import { useContext, useControls, useHardenSanitizers, useI18n } from '../../composables'
 import { save } from '../../utils'
 import Button from '../button.vue'
 import ErrorComponent from '../error-component.vue'
@@ -13,6 +12,7 @@ const props = withDefaults(defineProps<ImageNodeRendererProps>(), {})
 const fileExtensionPattern = /\.[^/.]+$/
 
 const { t } = useI18n()
+const { icons } = useContext()
 
 const { controls, hardenOptions } = toRefs(props)
 const { isControlEnabled } = useControls({
@@ -143,7 +143,7 @@ function handleMouseLeave() {
         <Button
           v-if="!isLoading && showDownload"
           data-stream-markdown="image-download-button"
-          :icon="ICONS.download"
+          :icon="icons.download"
           :name="t('button.download')"
           icon-class="test"
           :icon-width="16"

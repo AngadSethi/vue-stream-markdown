@@ -1,8 +1,7 @@
-import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 
 /// keep-sorted
-export const ICONS: Record<string, Component> = {
+export const ICONS = {
   check: defineAsyncComponent(() => import('~icons/lucide/check')),
   code: defineAsyncComponent(() => import('~icons/lucide/code')),
   collapse: defineAsyncComponent(() => import('~icons/lucide/chevron-down')),

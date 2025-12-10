@@ -8,11 +8,13 @@ import type { BuiltinTheme, BundledLanguage, BundledTheme, CodeToTokensOptions }
 import type { Component } from 'vue'
 import type { NodeRenderers, SyntaxTree } from './core'
 import type { LocaleConfig } from './locale'
+import type { IconName } from './shared'
 
 export interface StreamMarkdownProps extends StreamMarkdownContext, MarkdownParserOptions {
   mode?: 'static' | 'streaming'
   content?: string
   nodeRenderers?: NodeRenderers
+  icons?: Partial<Record<IconName, Component>>
   locale?: string | LocaleConfig
 }
 

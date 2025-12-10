@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useI18n, useZoom } from '../composables'
-import { ICONS } from '../constants'
+import { useContext, useI18n, useZoom } from '../composables'
 import Button from './button.vue'
 
 const props = withDefaults(defineProps<{
@@ -15,6 +14,7 @@ const props = withDefaults(defineProps<{
 const containerRef = ref<HTMLElement>()
 
 const { t } = useI18n()
+const { icons } = useContext()
 
 const {
   zoom,
@@ -97,12 +97,12 @@ function onTouchEnd(event: TouchEvent) {
   >
     <div v-if="showControl" data-stream-markdown="zoom-controls" :style="controlsStyle">
       <Button
-        :icon="ICONS.zoomIn"
+        :icon="icons.zoomIn"
         :name="t('button.zoomIn')"
         @click="zoomIn"
       />
       <Button
-        :icon="ICONS.zoomOut"
+        :icon="icons.zoomOut"
         :name="t('button.zoomOut')"
         @click="zoomOut"
       />

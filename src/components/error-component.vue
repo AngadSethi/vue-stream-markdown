@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { computed } from 'vue'
-import { useI18n } from '../composables'
-import { ICONS } from '../constants'
+import { useContext, useI18n } from '../composables'
 
 defineOptions({
   inheritAttrs: false,
@@ -19,6 +18,7 @@ const props = withDefaults(defineProps<{
 type ErrorVariant = 'vanilla' | 'image' | 'mermaid' | 'katex' | 'harden-image' | 'harden-link'
 
 const { t } = useI18n()
+const { icons } = useContext()
 
 const messages = computed((): Record<ErrorVariant, string> => ({
   'vanilla': t('error.vanilla'),
@@ -32,9 +32,9 @@ const messages = computed((): Record<ErrorVariant, string> => ({
 const icon = computed(() => {
   if (props.icon)
     return props.icon
-  if (ICONS[props.variant])
-    return ICONS[props.variant]
-  return ICONS[props.variant.replace('harden-', '')] || ICONS.error
+  if (icons.value[props.variant])
+    return icons.value[props.variant]
+  return icons.value[props.variant.replace('harden-', '')] || icons.value.error
 })
 
 const message = computed(() => props.message

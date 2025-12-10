@@ -34,6 +34,12 @@ The markdown content to render.
 
 Custom node renderers to override default rendering behavior for specific node types.
 
+### icons
+
+- **Type:** `Partial<Record<IconName, Component>>`
+
+Custom icon components to override default icons. You can provide custom Vue components for any of the available icon names. The available icon names are provided via TypeScript type hints.
+
 ### locale
 
 - **Type:** `string | LocaleConfig`
