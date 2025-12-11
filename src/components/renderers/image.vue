@@ -2,14 +2,13 @@
 import type { ImageNodeRendererProps } from '../../types'
 import { computed, ref, toRefs } from 'vue'
 import { useContext, useControls, useHardenSanitizers, useI18n } from '../../composables'
-import { save } from '../../utils'
+import { saveImage } from '../../utils'
 import Button from '../button.vue'
 import ErrorComponent from '../error-component.vue'
+import Image from '../image.vue'
 import Spin from '../spin.vue'
 
 const props = withDefaults(defineProps<ImageNodeRendererProps>(), {})
-
-const fileExtensionPattern = /\.[^/.]+$/
 
 const { t } = useI18n()
 const { icons } = useContext()
@@ -19,7 +18,6 @@ const { isControlEnabled } = useControls({
   controls,
 })
 
-const imgRef = ref()
 const maskRef = ref()
 
 const loadError = ref<boolean>(false)
@@ -55,12 +53,6 @@ const Error = computed(() => isHardenUrl.value
 
 function handleLoaded() {
   imageLoaded.value = true
-
-  if (fallbackAttempted.value)
-    return
-
-  if (imgRef.value)
-    props.mediumZoom.attach(imgRef.value)
 }
 
 function handleError() {
@@ -74,58 +66,17 @@ function handleError() {
 async function handleDownload() {
   if (!imageSrc.value)
     return
-
-  const response = await fetch(imageSrc.value)
-  const blob = await response.blob()
-  const urlPath = new URL(imageSrc.value, window.location.origin).pathname
-  const originalFilename = urlPath.split('/').pop() || ''
-  const extension = originalFilename.split('.').pop()
-  const hasExtension
-    = originalFilename.includes('.')
-      && extension !== undefined
-      && extension.length <= 4
-
-  let filename = ''
-
-  if (hasExtension) {
-    filename = originalFilename
-  }
-  else {
-    // Determine extension from blob type
-    const mimeType = blob.type
-    let fileExtension = 'png' // default
-
-    if (mimeType.includes('jpeg') || mimeType.includes('jpg')) {
-      fileExtension = 'jpg'
-    }
-    else if (mimeType.includes('png')) {
-      fileExtension = 'png'
-    }
-    else if (mimeType.includes('svg')) {
-      fileExtension = 'svg'
-    }
-    else if (mimeType.includes('gif')) {
-      fileExtension = 'gif'
-    }
-    else if (mimeType.includes('webp')) {
-      fileExtension = 'webp'
-    }
-
-    const baseName = alt.value || originalFilename || 'image'
-    filename = `${baseName.replace(fileExtensionPattern, '')}.${fileExtension}`
-  }
-
-  save(filename, blob, blob.type)
+  saveImage(imageSrc.value, alt.value)
 }
 
 function handleMouseEnter() {
   if (maskRef.value)
-    maskRef.value.style.display = 'block'
+    maskRef.value.style.opacity = 1
 }
 
 function handleMouseLeave() {
   if (maskRef.value)
-    maskRef.value.style.display = 'none'
+    maskRef.value.style.opacity = 0
 }
 </script>
 
@@ -157,24 +108,16 @@ function handleMouseLeave() {
 
       <Spin v-if="(isLoading || !imageLoaded) && !isHardenUrl" />
 
-      <img
+      <Image
         v-if="!isLoading && !isHardenUrl && typeof transformedUrl === 'string'"
-        ref="imgRef"
         :key="transformedUrl"
-        data-stream-markdown="image"
         :src="transformedUrl"
         :alt="alt"
         :title="title"
-        :style="{
-          opacity: isLoading ? 0 : 1,
-          cursor: isLoading ? 'default' : 'pointer',
-        }"
-        loading="lazy"
-        decoding="async"
-        data-zoomable
+        :preview="!fallbackAttempted"
         @load="handleLoaded"
         @error="handleError"
-      >
+      />
       <component
         :is="Error"
         v-else-if="isHardenUrl || loadError"
