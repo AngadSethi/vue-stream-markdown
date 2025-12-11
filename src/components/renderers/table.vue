@@ -32,7 +32,7 @@ const { isControlEnabled } = useControls({
 const showCopy = computed(() => isControlEnabled('table.copy'))
 const showDownload = computed(() => isControlEnabled('table.download'))
 
-const tableRef = ref<HTMLTableElement>()
+const tableRef = ref()
 const align = computed(() => props.node.align || [])
 
 const headerCells = computed(() => props.node.children[0].children ?? [])
@@ -49,9 +49,9 @@ function getTableContent(format: 'csv' | 'tsv' | 'markdown'): {
   mimeType: string
   extension: string
 } | null {
-  if (!tableRef.value)
+  if (!tableRef.value?.$el)
     return null
-  const tableData = extractTableDataFromElement(tableRef.value)
+  const tableData = extractTableDataFromElement(tableRef.value.$el)
   switch (format) {
     case 'markdown':
       return { content: tableDataToMarkdown(tableData), mimeType: 'text/markdown', extension: 'md' }
@@ -121,7 +121,7 @@ function getNodes(cell: unknown) {
     </div>
 
     <div data-stream-markdown="table-inner-wrapper">
-      <Table :headers="headerCells" :rows="bodyRows" :get-align="getAlign">
+      <Table ref="tableRef" :headers="headerCells" :rows="bodyRows" :get-align="getAlign">
         <template #header-cell="{ cell }">
           <NodeList v-bind="props" :nodes="getNodes(cell)" />
         </template>
