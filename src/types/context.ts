@@ -104,6 +104,7 @@ export type PreviewerConfig
 
 export interface ShikiOptions {
   theme?: [BuiltinTheme, BuiltinTheme]
+  langs?: BundledLanguage[]
   langAlias?: Record<string, string>
   codeToTokenOptions?: CodeToTokensOptions<BundledLanguage, BundledTheme>
 }

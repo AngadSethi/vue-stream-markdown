@@ -11,6 +11,7 @@ Configure Shiki syntax highlighting for code blocks. Shiki powers the syntax hig
 ```typescript
 interface ShikiOptions {
   theme?: [BuiltinTheme, BuiltinTheme]
+  langs?: BundledLanguage[]
   langAlias?: Record<string, string>
   codeToTokenOptions?: CodeToTokensOptions<BundledLanguage, BundledTheme>
 }
@@ -41,6 +42,34 @@ const shikiOptions: ShikiOptions = {
 ```
 
 Refer to the [Shiki Themes](https://shiki.matsu.io/themes) page for a complete list of available themes.
+
+### langs
+
+- **Type:** `BundledLanguage[]`
+- **Default:** `[]`
+
+Specifies the list of languages to preload when creating the Shiki highlighter. Languages specified here will be loaded upfront during highlighter initialization, which can improve performance by avoiding lazy loading delays when these languages are first encountered in code blocks.
+
+**Note:** By default, vue-stream-markdown loads languages on-demand as they appear in code blocks. Use this option to preload frequently used languages for better performance, especially if you know in advance which languages will be used in your markdown content.
+
+**Example:**
+
+```vue
+<script setup lang="ts">
+import type { ShikiOptions } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const shikiOptions: ShikiOptions = {
+  langs: ['typescript', 'vue'],
+}
+</script>
+
+<template>
+  <Markdown :content="content" :shiki-options="shikiOptions" />
+</template>
+```
+
+Refer to the [Shiki Languages](https://shiki.matsu.io/languages) page for a complete list of available languages.
 
 ### langAlias
 
@@ -323,6 +352,7 @@ import { Markdown } from 'vue-stream-markdown'
 
 const shikiOptions: ShikiOptions = {
   theme: ['vitesse-light', 'vitesse-dark'],
+  langs: ['typescript', 'javascript', 'vue'],
 }
 
 const mermaidOptions: MermaidOptions = {

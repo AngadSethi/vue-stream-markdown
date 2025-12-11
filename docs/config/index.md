@@ -230,6 +230,12 @@ Configuration for Shiki syntax highlighting.
 
 Theme pair for light and dark modes.
 
+#### langs
+
+- **Type:** `BundledLanguage[]`
+
+List of languages to preload when creating the Shiki highlighter. Preloading languages can improve performance by avoiding lazy loading delays.
+
 #### langAlias
 
 - **Type:** `Record<string, string>`

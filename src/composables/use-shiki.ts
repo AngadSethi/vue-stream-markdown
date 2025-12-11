@@ -29,6 +29,7 @@ export function useShiki(options?: UseShikiOptions) {
   const lightTheme = computed(() => shikiTheme.value[0] ?? DEFAULT_LIGHT_THEME)
   const darkTheme = computed(() => shikiTheme.value[1] ?? DEFAULT_DARK_THEME)
 
+  const langs = computed(() => unref(options?.shikiOptions)?.langs ?? [])
   const langAlias = computed(() => {
     const data = unref(options?.shikiOptions)?.langAlias ?? {}
     return {
@@ -55,13 +56,13 @@ export function useShiki(options?: UseShikiOptions) {
 
   async function getLanguage() {
     if (langAlias.value[lang.value])
-      return langAlias.value[lang.value]
+      return langAlias.value[lang.value] as BuiltinLanguage
 
     const { bundledLanguagesInfo } = await import('shiki')
     const language = bundledLanguagesInfo.find(l => l.id === lang.value || l.aliases?.includes(lang.value))
 
     if (language)
-      return language.id
+      return language.id as BuiltinLanguage
 
     return 'plaintext'
   }
@@ -94,7 +95,7 @@ export function useShiki(options?: UseShikiOptions) {
       const { createHighlighter } = await import('shiki')
       return createHighlighter({
         themes: [await getTheme()],
-        langs: [await getLanguage()],
+        langs: langs.value,
         langAlias: langAlias.value,
       })
     })()
@@ -108,7 +109,7 @@ export function useShiki(options?: UseShikiOptions) {
     const highlighter = await getHighlighter()
     return highlighter.codeToTokens(code, {
       theme: await getTheme(),
-      lang: await getLanguage() as BuiltinLanguage,
+      lang: await getLanguage(),
       ...codeToTokenOptions.value,
     })
   }
