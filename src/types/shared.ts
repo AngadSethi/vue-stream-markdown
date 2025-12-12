@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { CSSProperties } from 'vue'
 import type { ICONS } from '../constants'
 
 export type IconName
@@ -10,5 +10,15 @@ export type IconName
 export interface SelectItem {
   label: string
   value: string
-  icon?: Component
+  icon?: string
+}
+
+export interface Action {
+  key: string
+  name: string
+  icon: string
+  iconStyle?: CSSProperties
+  buttonStyle?: CSSProperties
+  options?: SelectItem[]
+  onClick: (event: MouseEvent, item?: SelectItem) => void
 }

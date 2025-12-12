@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import type { Component, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 import type { SelectItem } from '../types'
-import { computed, h } from 'vue'
+import { createReusableTemplate } from '@vueuse/core'
+import { computed } from 'vue'
 import Dropdown from './dropdown.vue'
+import Icon from './icon.vue'
 import Tooltip from './tooltip.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<{
   variant?: 'icon' | 'text'
   name: string
   buttonClass?: string | string[] | Record<string, unknown>
   buttonStyle?: CSSProperties
-  icon?: Component
+  icon?: string
   iconWidth?: number
   iconHeight?: number
   iconClass?: string | string[] | Record<string, unknown>
@@ -29,6 +35,8 @@ const emits = defineEmits<{
   (e: 'click', event: MouseEvent, item?: SelectItem): void
 }>()
 
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
+
 const isDropdown = computed(() => props.options.length > 0)
 
 function onClick(event: MouseEvent) {
@@ -41,22 +49,22 @@ function onDropdownClick(event: MouseEvent, item: SelectItem) {
   if (item)
     emits('click', event, item)
 }
-
-const Icon = computed(() => {
-  if (!props.icon)
-    return null
-
-  return h(props.icon, {
-    width: props.iconWidth,
-    height: props.iconHeight,
-    class: props.iconClass,
-    style: props.iconStyle,
-  })
-})
 </script>
 
 <template>
+  <DefineTemplate>
+    <Icon
+      v-if="icon"
+      :icon="icon"
+      :width="iconWidth"
+      :height="iconHeight"
+      :class="iconClass"
+      :style="iconStyle"
+    />
+  </DefineTemplate>
+
   <component
+    v-bind="$attrs"
     :is="isDropdown ? Dropdown : Tooltip"
     v-if="variant === 'icon'"
     :content="isDropdown ? undefined : name"
@@ -65,29 +73,32 @@ const Icon = computed(() => {
     @click="onDropdownClick"
   >
     <button
+      v-bind="$attrs"
       data-stream-markdown="button"
       type="button"
       :class="buttonClass"
       :style="buttonStyle"
       @click="onClick"
     >
-      <component :is="Icon" />
+      <ReuseTemplate />
     </button>
   </component>
 
   <button
     v-else-if="variant === 'text' && !isDropdown"
+    v-bind="$attrs"
     data-stream-markdown="button"
     type="button"
     :class="buttonClass"
     :style="buttonStyle"
     @click="onClick"
   >
-    <component :is="Icon" />
+    <ReuseTemplate />
+
     {{ name }}
   </button>
 
-  <Dropdown v-else :title="name" :options="options" @click="onDropdownClick">
+  <Dropdown v-else v-bind="$attrs" :title="name" :options="options" @click="onDropdownClick">
     <button
       data-stream-markdown="button"
       type="button"
@@ -95,7 +106,8 @@ const Icon = computed(() => {
       :style="buttonStyle"
       @click="onClick"
     >
-      <component :is="Icon" />
+      <ReuseTemplate />
+
       {{ name }}
     </button>
   </Dropdown>

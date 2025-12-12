@@ -2,7 +2,7 @@
 import type { CSSProperties } from 'vue'
 import type { ZoomControlPosition } from '../types'
 import { computed, ref } from 'vue'
-import { useContext, useI18n, useZoom } from '../composables'
+import { useI18n, useZoom } from '../composables'
 import Button from './button.vue'
 
 const props = withDefaults(defineProps<{
@@ -20,7 +20,6 @@ const props = withDefaults(defineProps<{
 const containerRef = ref<HTMLElement>()
 
 const { t } = useI18n()
-const { icons } = useContext()
 
 const {
   zoom,
@@ -129,13 +128,13 @@ function onTouchEnd(event: TouchEvent) {
     <div v-if="showControl" data-stream-markdown="zoom-controls" :style="controlsPosition" @click.stop>
       <slot name="controls" v-bind="controlButtonProps" />
       <Button
-        :icon="icons.zoomIn"
+        icon="zoomIn"
         :name="t('button.zoomIn')"
         v-bind="controlButtonProps"
         @click="zoomIn"
       />
       <Button
-        :icon="icons.zoomOut"
+        icon="zoomOut"
         :name="t('button.zoomOut')"
         v-bind="controlButtonProps"
         @click="zoomOut"

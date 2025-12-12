@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BuiltinLanguage } from 'shiki'
-import type { Component, CSSProperties } from 'vue'
-import type { CodeNodeRendererProps, SelectItem } from '../../types'
+import type { Component } from 'vue'
+import type { Action, CodeNodeRendererProps, SelectItem } from '../../types'
 import { createReusableTemplate, useClipboard } from '@vueuse/core'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
 import { useCodeOptions, useContext, useControls, useI18n, useMermaid } from '../../composables'
@@ -23,15 +23,6 @@ defineOptions({
 
 const props = withDefaults(defineProps<CodeNodeRendererProps>(), {})
 
-interface Action {
-  key: string
-  name: string
-  icon: Component
-  iconStyle?: CSSProperties
-  options?: SelectItem[]
-  onClick: (event: MouseEvent, item?: SelectItem) => void
-}
-
 const CodeNode = defineAsyncComponent(() => import('../renderers/code/index.vue'))
 
 const { controls, previewers, codeOptions } = toRefs(props)
@@ -39,7 +30,6 @@ const { controls, previewers, codeOptions } = toRefs(props)
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
 const { t } = useI18n()
-const { icons } = useContext()
 
 const { isControlEnabled } = useControls({
   controls,
@@ -169,7 +159,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.collapse'),
       key: 'collapse',
-      icon: icons.value.collapse,
+      icon: 'collapse',
       iconStyle: {
         transform: collapsed.value ? 'rotate(180deg)' : undefined,
         transition: 'transform var(--default-transition-duration)',
@@ -180,7 +170,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.copy'),
       key: 'copy',
-      icon: copied.value ? icons.value.check : icons.value.copy,
+      icon: copied.value ? 'check' : 'copy',
       visible: () => showCopy.value,
       onClick: () => {
         if (!props.node.value)
@@ -192,7 +182,7 @@ const actions = computed((): Action[] => {
     {
       name: t('button.download'),
       key: 'download',
-      icon: icons.value.download,
+      icon: 'download',
       options: downloadOptions.value.length > 0 ? downloadOptions.value : undefined,
       visible: () => showDownload.value && !!LANGUAGE_EXTENSIONS[language.value],
       onClick: (_event: MouseEvent, item?: SelectItem) => {
@@ -212,13 +202,13 @@ const actions = computed((): Action[] => {
     {
       name: fullscreen.value ? t('button.minimize') : t('button.maximize'),
       key: 'fullscreen',
-      icon: fullscreen.value ? icons.value.minimize : icons.value.maximize,
+      icon: fullscreen.value ? 'minimize' : 'maximize',
       visible: () => showFullscreen.value,
       onClick: () => fullscreen.value = !fullscreen.value,
     },
   ].filter(button => !button.visible || button.visible())
 })
-const ModalActions = computed(() => actions.value.filter(i => i.key !== 'collapse'))
+const ModalActions = computed((): Action[] => actions.value.filter(i => i.key !== 'collapse'))
 
 watch(
   () => previewable.value,

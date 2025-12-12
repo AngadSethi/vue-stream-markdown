@@ -2,6 +2,7 @@
 import type { Component } from 'vue'
 import { computed } from 'vue'
 import { useContext, useI18n } from '../composables'
+import Icon from './icon.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -9,7 +10,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<{
   variant?: ErrorVariant
-  icon?: Component
+  icon?: string | Component
   message?: string
 }>(), {
   variant: 'vanilla',
@@ -29,12 +30,15 @@ const messages = computed((): Record<ErrorVariant, string> => ({
   'harden-link': t('error.harden'),
 }))
 
-const icon = computed(() => {
+const icon = computed((): string | Component => {
   if (props.icon)
     return props.icon
   if (icons.value[props.variant])
-    return icons.value[props.variant]
-  return icons.value[props.variant.replace('harden-', '')] || icons.value.error
+    return props.variant
+  const name = props.variant.replace('harden-', '')
+  if (icons.value[name])
+    return name
+  return 'error'
 })
 
 const message = computed(() => props.message
@@ -47,7 +51,8 @@ const isHarden = computed(() => props.variant?.startsWith?.('harden-'))
 <template>
   <span data-stream-markdown="error-component">
     <div data-stream-markdown="error-component-icon">
-      <component :is="icon" />
+      <Icon v-if="typeof icon === 'string'" :icon="icon" />
+      <component :is="icon" v-else />
     </div>
     <slot v-if="isHarden" />
     [{{ message }}]

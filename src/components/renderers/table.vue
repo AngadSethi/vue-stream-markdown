@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ParsedNode, SelectItem, TableNodeRendererProps } from '../../types'
+import type { Action, ParsedNode, SelectItem, TableNodeRendererProps } from '../../types'
 import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useContext, useControls, useI18n } from '../../composables'
@@ -18,7 +18,6 @@ import Table from '../table.vue'
 const props = withDefaults(defineProps<TableNodeRendererProps>(), {})
 
 const { t } = useI18n()
-const { icons } = useContext()
 
 const { onCopied } = useContext()
 const { copy, copied } = useClipboard({
@@ -69,11 +68,11 @@ const options: SelectItem[] = [
   { label: 'Markdown', value: 'markdown' },
 ]
 
-const controls = computed(() => [
+const actions = computed((): Action[] => [
   {
     name: t('button.copy'),
     key: 'copy',
-    icon: copied.value ? icons.value.check : icons.value.copy,
+    icon: copied.value ? 'check' : 'copy',
     options,
     visible: () => showCopy.value,
     onClick: (_event: MouseEvent, item?: SelectItem) => {
@@ -89,7 +88,7 @@ const controls = computed(() => [
   {
     name: t('button.download'),
     key: 'download',
-    icon: icons.value.download,
+    icon: 'download',
     options,
     visible: () => showDownload.value,
     onClick: (_event: MouseEvent, item?: SelectItem) => {
@@ -111,7 +110,7 @@ function getNodes(cell: unknown) {
   <div data-stream-markdown="table-wrapper">
     <div data-stream-markdown="table-controls">
       <Button
-        v-for="item in controls"
+        v-for="item in actions"
         :key="item.key"
         :name="item.name"
         :icon="item.icon"

@@ -8,7 +8,7 @@ import NodeList from '../node-list.vue'
 const props = withDefaults(defineProps<FootnoteDefinitionNodeRendererProps>(), {})
 
 const { t } = useI18n()
-const { icons, getContainer } = useContext()
+const { getContainer } = useContext()
 
 const id = computed(() => props.node.identifier)
 const label = computed(() => props.node.label ?? id.value)
@@ -31,7 +31,7 @@ function scrollToReference() {
     <Button
       data-stream-markdown="footnote-definition-button"
       :name="t('button.back')"
-      :icon="icons.cornerDownLeft"
+      icon="cornerDownLeft"
       :icon-style="{
         color: 'var(--primary)',
       }"

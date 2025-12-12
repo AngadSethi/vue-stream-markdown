@@ -1,16 +1,6 @@
 <script setup lang="ts">
-import type { Component, CSSProperties } from 'vue'
-import type { SelectItem } from '../../types'
+import type { Action } from '../../types'
 import Button from '../button.vue'
-
-interface Action {
-  key: string
-  name: string
-  icon: Component
-  iconStyle?: CSSProperties
-  options?: SelectItem[]
-  onClick: (event: MouseEvent, item?: SelectItem) => void
-}
 
 withDefaults(defineProps<{
   actions?: Action[]

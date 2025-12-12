@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ControlsConfig, ImageNode, ParsedNode } from '../types'
+import type { Action, ControlsConfig, ImageNode, ParsedNode } from '../types'
 import { useCycleList } from '@vueuse/core'
 import { treeFlatFilter } from 'treechop'
 import { computed, ref, toRefs, watch } from 'vue'
@@ -90,6 +90,67 @@ const imageStyle = computed(() => ({
   transition: 'transform 0.3s ease',
   ...elementStyle.value,
 }))
+
+const actions = computed((): Action[] => [
+  {
+    key: 'download',
+    icon: 'download',
+    name: t('button.download'),
+    onClick: download,
+    visible: () => !!imageSrc.value && enableDownload.value,
+  },
+  {
+    key: 'previous',
+    icon: 'arrowLeft',
+    name: t('button.previous'),
+    onClick: () => prev(),
+    visible: () => imageList.value.length > 1 && enableCarousel.value,
+  },
+  {
+    key: 'next',
+    icon: icons.value.arrowRight ? 'arrowRight' : 'arrowLeft',
+    name: t('button.next'),
+    onClick: () => next(),
+    buttonStyle: icons.value.arrowRight
+      ? undefined
+      : { transform: 'scaleX(-1)' },
+    visible: () => imageList.value.length > 1 && enableCarousel.value,
+  },
+  {
+    key: 'flipX',
+    icon: 'flipHorizontal',
+    name: t('button.flipX'),
+    onClick: flipHorizontal,
+    visible: () => enableFlip.value,
+  },
+  {
+    key: 'flipY',
+    icon: icons.value.flipVertical ? 'flipVertical' : 'flipHorizontal',
+    name: t('button.flipY'),
+    onClick: flipVertical,
+    buttonStyle: icons.value.flipVertical
+      ? undefined
+      : { rotate: '90deg' },
+    visible: () => enableFlip.value,
+  },
+  {
+    key: 'rotateLeft',
+    icon: 'rotateLeft',
+    name: t('button.rotateLeft'),
+    onClick: rotateLeft,
+    visible: () => enableRotate.value,
+  },
+  {
+    key: 'rotateRight',
+    icon: icons.value.rotateRight ? 'rotateRight' : 'rotateLeft',
+    name: t('button.rotateRight'),
+    onClick: rotateRight,
+    buttonStyle: icons.value.rotateRight
+      ? undefined
+      : { transform: 'scaleX(-1)' },
+    visible: () => enableRotate.value,
+  },
+].filter(action => !action.visible || action.visible()))
 
 function handleLoad(event: Event) {
   loaded.value = true
@@ -184,62 +245,13 @@ watch(open, (data) => {
     >
       <template #controls="buttonProps">
         <Button
-          v-if="imageSrc && enableDownload"
+          v-for="action in actions"
+          :key="action.key"
           v-bind="buttonProps"
-          :icon="icons.download"
-          :name="t('button.download')"
-          @click="download"
-        />
-        <Button
-          v-if="imageList.length > 1 && enableCarousel"
-          v-bind="buttonProps"
-          :icon="icons.arrowLeft"
-          :name="t('button.previous')"
-          @click="() => prev()"
-        />
-        <Button
-          v-if="imageList.length > 1 && enableCarousel"
-          v-bind="buttonProps"
-          :icon="icons.arrowRight || icons.arrowLeft"
-          :name="t('button.next')"
-          :button-style="{
-            transform: icons.arrowRight ? undefined : 'scaleX(-1)',
-          }"
-          @click="() => next()"
-        />
-        <Button
-          v-if="enableFlip"
-          v-bind="buttonProps"
-          :icon="icons.flipHorizontal"
-          :name="t('button.flipX')"
-          @click="flipHorizontal"
-        />
-        <Button
-          v-if="enableFlip"
-          v-bind="buttonProps"
-          :icon="icons.flipVertical || icons.flipHorizontal"
-          :name="t('button.flipY')"
-          :button-style="{
-            rotate: icons.flipVertical ? undefined : '90deg',
-          }"
-          @click="flipVertical"
-        />
-        <Button
-          v-if="enableRotate"
-          v-bind="buttonProps"
-          :icon="icons.rotateLeft"
-          :name="t('button.rotateLeft')"
-          @click="rotateLeft"
-        />
-        <Button
-          v-if="enableRotate"
-          v-bind="buttonProps"
-          :icon="icons.rotateRight || icons.rotateLeft"
-          :name="t('button.rotateRight')"
-          :button-style="{
-            transform: icons.rotateRight ? undefined : 'scaleX(-1)',
-          }"
-          @click="rotateRight"
+          :icon="action.icon"
+          :name="action.name"
+          :button-style="action.buttonStyle"
+          @click="action.onClick"
         />
       </template>
 

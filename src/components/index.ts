@@ -10,6 +10,7 @@ export const UI: Record<string, Component> = {
   CodeBlock: defineAsyncComponent(() => import('./code-block/index.vue')),
   Dropdown: defineAsyncComponent(() => import('./dropdown.vue')),
   ErrorComponent: defineAsyncComponent(() => import('./error-component.vue')),
+  Icon: defineAsyncComponent(() => import('./icon.vue')),
   Image: defineAsyncComponent(() => import('./image.vue')),
   Modal: defineAsyncComponent(() => import('./modal.vue')),
   NodeList: defineAsyncComponent(() => import('./node-list.vue')),
