@@ -163,7 +163,11 @@ const scrollToBottom = throttle(800, () => {
 //   },
 // )
 
-watch(() => isTyping.value, () => typedEnable.value = isTyping.value)
+watch(() => isTyping.value, () => {
+  typedEnable.value = isTyping.value
+  if (!isTyping.value)
+    userConfig.value.autoScroll = false
+})
 watch(() => mode.value, terminateTypeWriting)
 watch(() => locale.value, () => userConfig.value.locale = locale.value)
 

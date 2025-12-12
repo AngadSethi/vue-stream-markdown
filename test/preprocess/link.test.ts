@@ -95,28 +95,17 @@ describe('fixLink', () => {
       expect(fixLink('Text [')).toBe('Text ')
     })
 
-    it('should remove trailing standalone ![', () => {
-      expect(fixLink('Text ![')).toBe('Text ')
-    })
-
     it('should remove trailing standalone [ with whitespace', () => {
       expect(fixLink('Text [ ')).toBe('Text ')
       expect(fixLink('Text [\n')).toBe('Text ')
     })
 
-    it('should remove trailing standalone ![ with whitespace', () => {
-      expect(fixLink('Text ![ ')).toBe('Text ')
-      expect(fixLink('Text ![\n')).toBe('Text ')
-    })
-
     it('should remove standalone [ at start of line', () => {
       expect(fixLink('Text\n[')).toBe('Text\n')
-      expect(fixLink('Text\n![')).toBe('Text\n')
     })
 
     it('should remove standalone [ after blank line', () => {
       expect(fixLink('Para1\n\n[')).toBe('Para1\n\n')
-      expect(fixLink('Para1\n\n![')).toBe('Para1\n\n')
     })
 
     it('should not remove [ when it has content', () => {

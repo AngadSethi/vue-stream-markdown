@@ -198,7 +198,7 @@ As content streams in, incomplete links render with loading state (no underline,
 - `[Click here` → Loading state (non-clickable)
 - `[Click here](https://example.com)` → Fully clickable with underline
 - `Text [` → `Text ` (standalone bracket removed)
-- `Text ![\n` → `Text ` (standalone bracket and trailing newline removed)
+- `Text [\n` → `Text ` (standalone bracket and trailing newline removed)
 
 ### Image Streaming
 

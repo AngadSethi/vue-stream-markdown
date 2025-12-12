@@ -29,7 +29,7 @@ function getNodeBindings(node: ParsedNode) {
 }
 
 function getNodeIndexKey(node: ParsedNode, index: number) {
-  const indexKey = `${props.indexKey || 'stream-markdown'}`
+  const indexKey = `${props.indexKey || 'stream-markdown'}-${node.type}`
 
   if (node.type === 'footnoteReference' || node.type === 'footnoteDefinition')
     return `${indexKey}-${node.identifier}`

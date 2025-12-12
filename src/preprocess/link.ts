@@ -35,10 +35,10 @@ import { incompleteBracketPattern, incompleteLinkTextPattern, incompleteUrlPatte
  * @example
  * fixLink('Text [')
  * // Returns: 'Text '
- * // Removes trailing standalone [ or ![ without content
+ * // Removes trailing standalone [ without content
  *
  * @example
- * fixLink('Text ![\n')
+ * fixLink('Text [\n')
  * // Returns: 'Text '
  * // Removes trailing standalone bracket and trailing newline
  */
@@ -71,8 +71,9 @@ export function fixLink(content: string): string {
   if (lastNonEmptyLineIndex >= 0) {
     const lastLine = lines[lastNonEmptyLineIndex]
 
-    // First, remove trailing standalone [ or ![ (without any content after)
+    // First, remove trailing standalone [ (without any content after)
     // This prevents showing incomplete brackets that would create empty links
+    // Note: Only handles [ to avoid issues during streaming
     if (trailingStandaloneBracketPattern.test(lastLine)) {
       const bracketMatch = lastLine.match(trailingStandaloneBracketPattern)
       if (bracketMatch) {
@@ -91,7 +92,7 @@ export function fixLink(content: string): string {
           newLines[lastNonEmptyLineIndex] = newLine
 
           // If the next line after the modified line is empty, remove it too
-          // This handles cases like "Text ![\n" where we want to remove both ![ and the newline
+          // This handles cases like "Text [\n" where we want to remove both [ and the newline
           if (lastNonEmptyLineIndex + 1 < newLines.length && newLines[lastNonEmptyLineIndex + 1].trim() === '') {
             newLines.splice(lastNonEmptyLineIndex + 1, 1)
           }

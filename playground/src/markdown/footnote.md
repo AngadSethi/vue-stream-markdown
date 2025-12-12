@@ -122,7 +122,7 @@ The evolution of digital knowledge represents one of the most profound transform
 
 ## Footnotes
 
-[^1]: Popularly attributed to modern digital‑era commentators, emphasizing the acceleration of knowledge in the information age.
+[^1]: [Popularly attributed to modern digital‑era commentators, emphasizing the acceleration of knowledge in the information age.](http://google.com)
 
 [^2]: Digitization technologies such as OCR have improved drastically since the late 20th century.
 

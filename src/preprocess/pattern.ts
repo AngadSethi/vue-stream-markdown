@@ -18,7 +18,7 @@ export const incompleteBracketPattern = /!?\[[^\]]*$/
 export const incompleteLinkTextPattern = /!?\[[^\]]+\]\s*$/
 export const incompleteUrlPattern = /!?\[[^\]]+\]\([^)]*$/
 export const incompleteFootnoteRefPattern = /\[\^[^\]]*$/
-export const trailingStandaloneBracketPattern = /(!?\[)\s*$/
+export const trailingStandaloneBracketPattern = /(\[)\s*$/
 
 // Footnote patterns
 export const footnoteDefPattern = /\[\^[^\]]+\]:/g
