@@ -22,6 +22,13 @@ StreamMarkdown provides comprehensive configuration options to customize the mar
 
 Rendering mode. `'static'` renders the entire content at once, while `'streaming'` renders content progressively.
 
+### enableAnimate
+
+- **Type:** `boolean | undefined`
+- **Default:** `undefined`
+
+Whether to enable the typewriter animation effect when nodes are rendered. When set to `undefined` (default), the animation is automatically enabled in `'streaming'` mode and disabled in `'static'` mode. When explicitly set to `true` or `false`, it will override the default behavior based on the mode.
+
 ### content
 
 - **Type:** `string`

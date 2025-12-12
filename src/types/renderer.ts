@@ -32,16 +32,16 @@ import type {
   YamlNode,
 } from './core'
 
-export interface NodeRendererListProps extends Omit<NodeRendererProps, 'node' | 'indexKey'> {
+export interface NodeRendererListProps extends Omit<NodeRendererProps, 'node' | 'nodeKey'> {
   nodes?: ParsedNode[]
-  indexKey?: number | string
+  nodeKey?: string
 }
 
 export interface NodeRendererProps extends StreamMarkdownContext {
   markdownParser: MarkdownParser
   nodeRenderers: NodeRenderers
   node: ParsedNode
-  indexKey: number | string
+  nodeKey: string
 }
 
 export interface BlockquoteNodeRendererProps extends NodeRendererProps {

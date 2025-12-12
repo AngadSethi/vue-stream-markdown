@@ -16,6 +16,7 @@ export interface StreamMarkdownProps extends StreamMarkdownContext, MarkdownPars
   nodeRenderers?: NodeRenderers
   icons?: Partial<Record<IconName, Component>>
   locale?: string | LocaleConfig
+  enableAnimate?: boolean
 }
 
 export interface MarkdownParserOptions {

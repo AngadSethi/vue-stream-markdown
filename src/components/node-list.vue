@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NodeRendererListProps, NodeType, ParsedNode } from '../types'
 import { computed } from 'vue'
+import { useContext } from '../composables'
 import Markdown from './markdown.vue'
 
 defineOptions({
@@ -11,10 +12,18 @@ const props = withDefaults(defineProps<NodeRendererListProps>(), {
   nodes: () => [],
 })
 
+const { mode, enableAnimate } = useContext()
+
+const enableTransition = computed(() => {
+  if (typeof enableAnimate.value === 'boolean')
+    return enableAnimate.value
+  return mode.value === 'streaming'
+})
+
 const nodes = computed(() => props.nodes?.map((node, index) => ({
   node,
   index,
-  key: getNodeIndexKey(node, index),
+  key: getNodeKey(node, index),
 })))
 
 // exclude nodes that should not be transitioned
@@ -28,27 +37,25 @@ function getNodeBindings(node: ParsedNode) {
   return { ...props, node, nodes: undefined }
 }
 
-function getNodeIndexKey(node: ParsedNode, index: number) {
-  const indexKey = `${props.indexKey || 'stream-markdown'}-${node.type}`
-
+function getNodeKey(node: ParsedNode, index: number) {
+  const nodeKey = `${props.nodeKey || 'stream-markdown'}-${node.type}`
   if (node.type === 'footnoteReference' || node.type === 'footnoteDefinition')
-    return `${indexKey}-${node.identifier}`
-
-  return `${indexKey}-${index}`
+    return `${nodeKey}-${node.identifier}`
+  return `${nodeKey}-${index}`
 }
 </script>
 
 <template>
   <template v-for="item in nodes" :key="item.key">
     <Transition
-      v-if="!excludeTransition.includes(item.node.type)"
+      v-if="enableTransition && !excludeTransition.includes(item.node.type)"
       name="typewriter"
       appear
     >
       <component
         :is="getNodeComponent(item.node)"
         v-bind="getNodeBindings(item.node)"
-        :index-key="item.key"
+        :node-key="item.key"
       />
     </Transition>
 
@@ -56,7 +63,7 @@ function getNodeIndexKey(node: ParsedNode, index: number) {
       :is="getNodeComponent(item.node)"
       v-else
       v-bind="getNodeBindings(item.node)"
-      :index-key="item.key"
+      :node-key="item.key"
     />
   </template>
 </template>

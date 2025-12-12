@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<StreamMarkdownProps>(), {
   controls: true,
   previewers: true,
   isDark: false,
+  enableAnimate: undefined,
   locale: 'en-US',
 })
 
@@ -24,7 +25,7 @@ const emits = defineEmits<{
   (e: 'copied', content: string): void
 }>()
 
-const { shikiOptions, mermaidOptions, isDark } = toRefs(props)
+const { mode, shikiOptions, mermaidOptions, isDark, enableAnimate } = toRefs(props)
 
 const containerRef = ref<HTMLDivElement>()
 
@@ -74,8 +75,10 @@ watch(() => props.mode, () => markdownParser.updateMode(props.mode))
 watch(() => props.locale, () => loadLocaleMessages(props.locale))
 
 provideContext({
+  mode,
   icons,
   isDark,
+  enableAnimate,
   parsedNodes,
   getContainer,
   onCopied: (content: string) => {

@@ -82,7 +82,7 @@ All custom renderers receive the following props through their specific Props ty
 - `node` - The parsed markdown node (typed according to the node type)
 - `markdownParser` - The `MarkdownParser` instance
 - `nodeRenderers` - The merged node renderers object
-- `indexKey` - A unique key for the node
+- `nodeKey` - A unique key for the node
 - `isDark` - Dark mode state
 
 ## Example: Custom Heading Renderer

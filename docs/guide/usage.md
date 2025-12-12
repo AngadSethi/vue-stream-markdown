@@ -53,6 +53,7 @@ const content = ref('# Hello World\n\nThis is a markdown content.')
 
 - `content` (string): The markdown content to render
 - `mode` ('streaming' | 'static'): Rendering mode, defaults to `'streaming'`
+- `enableAnimate` (boolean | undefined): Enable typewriter animation effect. When `undefined`, automatically enabled in `'streaming'` mode and disabled in `'static'` mode
 - `isDark` (boolean): Enable dark mode
 - `locale` (string | LocaleConfig): Locale for internationalization, defaults to `'en-US'`
 

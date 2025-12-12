@@ -5,8 +5,10 @@ import { computed, inject, provide, unref } from 'vue'
 const CONTEXT_KEY = Symbol('stream-markdown-context')
 
 interface Context {
+  mode?: MaybeRef<'static' | 'streaming'>
   isDark?: MaybeRef<boolean>
   icons?: MaybeRef<Record<IconName, Component>>
+  enableAnimate?: MaybeRef<boolean | undefined>
   parsedNodes?: MaybeRef<ParsedNode[]>
   getContainer?: () => HTMLElement | undefined
   onCopied?: (content: string) => void
@@ -15,8 +17,10 @@ interface Context {
 export function useContext() {
   const context = injectContext()
 
+  const mode = computed(() => unref(context.mode) ?? 'streaming')
   const icons = computed((): Record<string, Component> => unref(context.icons) ?? {})
   const isDark = computed(() => unref(context.isDark) ?? false)
+  const enableAnimate = computed(() => unref(context.enableAnimate))
   const parsedNodes = computed(() => unref(context.parsedNodes) ?? [])
 
   function provideContext(ctx: Partial<Context>) {
@@ -33,8 +37,10 @@ export function useContext() {
     context,
     provideContext,
     injectContext,
+    mode,
     icons,
     isDark,
+    enableAnimate,
     parsedNodes,
     get getContainer() {
       return context.getContainer || (() => undefined)
