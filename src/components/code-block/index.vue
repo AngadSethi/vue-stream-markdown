@@ -236,6 +236,7 @@ watch(
     />
     <div v-else />
   </DefineTemplate>
+
   <div
     data-stream-markdown="code-block"
     :data-collapsed="collapsed"

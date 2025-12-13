@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CSSProperties } from 'vue'
+import type { Component, CSSProperties } from 'vue'
 import type { SelectItem } from '../types'
 import { createReusableTemplate } from '@vueuse/core'
 import { computed } from 'vue'
@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{
   name: string
   buttonClass?: string | string[] | Record<string, unknown>
   buttonStyle?: CSSProperties
-  icon?: string
+  icon?: string | Component
   iconWidth?: number
   iconHeight?: number
   iconClass?: string | string[] | Record<string, unknown>
