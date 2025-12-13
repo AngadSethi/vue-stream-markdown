@@ -27,14 +27,14 @@ const mermaidLightTheme = defineModel<string>('mermaidLightTheme', { required: f
 const mermaidDarkTheme = defineModel<string>('mermaidDarkTheme', { required: false, default: 'dark' })
 
 const BLOCK_CLASSES = [
-  'h-11',
+  'h-10',
   'flex',
   'items-center',
   'justify-between',
   'rounded-md',
   'hover:bg-muted',
   'duration-150',
-  'px-2',
+  'px-1',
 ]
 
 const BLOCK_TITLE_CLASSES = [
@@ -47,11 +47,15 @@ const LABEL_CLASSES = [
   'text-muted-foreground',
   'font-semibold',
   'shrink-0',
-  'w-28',
+  'w-24',
+]
+
+const CONTROL_CLASSES = [
+  'w-full',
 ]
 
 const DIVIDER_CLASSES = [
-  'my-3',
+  'my-2',
   'border-border',
 ]
 
@@ -105,17 +109,33 @@ watch(() => staticMode.value, () => {
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Typing Index</Label>
-          <Input v-model:value="typingIndex" type="number" placeholder="Typing index" @change="onTypingIndexChange" />
+          <Input
+            v-model:value="typingIndex"
+            :class="CONTROL_CLASSES"
+            type="number"
+            placeholder="Typing index"
+            @change="onTypingIndexChange"
+          />
         </div>
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Typed Step</Label>
-          <Input v-model:value="typedStep" type="number" placeholder="Typed step" />
+          <Input
+            v-model:value="typedStep"
+            :class="CONTROL_CLASSES"
+            type="number"
+            placeholder="Typed step"
+          />
         </div>
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Typed Delay</Label>
-          <Input v-model:value="typedDelay" type="number" placeholder="Typed delay" />
+          <Input
+            v-model:value="typedDelay"
+            :class="CONTROL_CLASSES"
+            type="number"
+            placeholder="Typed delay"
+          />
         </div>
 
         <hr :class="DIVIDER_CLASSES">
@@ -125,12 +145,20 @@ watch(() => staticMode.value, () => {
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Light Theme</Label>
-          <Select v-model:value="shikiLightTheme" :options="SHIKI_THEMES" />
+          <Select
+            v-model:value="shikiLightTheme"
+            :class="CONTROL_CLASSES"
+            :options="SHIKI_THEMES"
+          />
         </div>
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Dark Theme</Label>
-          <Select v-model:value="shikiDarkTheme" :options="SHIKI_THEMES" />
+          <Select
+            v-model:value="shikiDarkTheme"
+            :class="CONTROL_CLASSES"
+            :options="SHIKI_THEMES"
+          />
         </div>
 
         <hr :class="DIVIDER_CLASSES">
@@ -140,12 +168,20 @@ watch(() => staticMode.value, () => {
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Light Theme</Label>
-          <Select v-model:value="mermaidLightTheme" :options="MERMAID_THEMES" />
+          <Select
+            v-model:value="mermaidLightTheme"
+            :class="CONTROL_CLASSES"
+            :options="MERMAID_THEMES"
+          />
         </div>
 
         <div :class="BLOCK_CLASSES">
           <Label :class="LABEL_CLASSES">Dark Theme</Label>
-          <Select v-model:value="mermaidDarkTheme" :options="MERMAID_THEMES" />
+          <Select
+            v-model:value="mermaidDarkTheme"
+            :class="CONTROL_CLASSES"
+            :options="MERMAID_THEMES"
+          />
         </div>
       </div>
     </template>

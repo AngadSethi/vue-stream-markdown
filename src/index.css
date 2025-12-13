@@ -48,7 +48,7 @@
   color: var(--popover-foreground);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
-  z-index: 100;
+  z-index: 10;
 }
 
 .stream-markdown [data-stream-markdown='tooltip-overlay'] {
@@ -250,7 +250,7 @@
 
 .stream-markdown [data-stream-markdown='zoom-controls'] {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.25rem;
