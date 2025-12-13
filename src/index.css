@@ -48,7 +48,7 @@
   color: var(--popover-foreground);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
-  z-index: 10;
+  z-index: 110;
 }
 
 .stream-markdown [data-stream-markdown='tooltip-overlay'] {
@@ -270,6 +270,7 @@
   margin-block: 1rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border);
+  overflow: clip;
 }
 
 .stream-markdown [data-stream-markdown='code-block'][data-collapsed='true'] [data-stream-markdown='code-block-header'] {

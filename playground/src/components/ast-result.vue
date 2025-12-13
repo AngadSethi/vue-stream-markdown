@@ -70,7 +70,7 @@ onMounted(updateHeight)
 <template>
   <div ref="containerRef" class="size-full relative">
     <ScrollTriggerGroup :get-container="getContainer">
-      <div class="flex gap-1 w-80">
+      <div class="flex gap-1 w-80 items-center">
         <CopyButton :content="content" />
         <Label class="shrink-0">Hide Keys:</Label>
         <Input v-model:value="hideKeysValue" class="pointer-events-auto" placeholder="field1, field2, ..." />
