@@ -9,27 +9,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/eslint',
   ],
-
-  typescript: {
-    tsConfig: {
-      compilerOptions: {
-        paths: {
-          'vue-stream-markdown': ['../src/'],
-        },
-      },
-    },
-  },
-
-  alias,
-
-  css: [
-    '../src/index.css',
-    './app/assets/reset.css',
-    './app/assets/main.css',
-    './app/assets/theme.css',
-    // './app/assets/theme-hsl.css',
-    // './app/assets/theme-tailwind-v3.css',
-  ],
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -44,7 +23,26 @@ export default defineNuxtConfig({
       ],
     },
   },
-  compatibilityDate: '2025-12-13',
+  css: [
+    '../src/index.css',
+    './app/assets/reset.css',
+    './app/assets/main.css',
+    './app/assets/theme.css',
+    // './app/assets/theme-hsl.css',
+    // './app/assets/theme-tailwind-v3.css',
+  ],
+  alias,
+  future: { compatibilityVersion: 4 },
+  compatibilityDate: 'latest',
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        paths: {
+          'vue-stream-markdown': ['../src/'],
+        },
+      },
+    },
+  },
   eslint: {
     config: {
       standalone: false,

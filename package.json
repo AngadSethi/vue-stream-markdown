@@ -39,7 +39,7 @@
     "dev": "pnpm playground:dev",
     "build": "tsdown",
     "playground:dev": "pnpm -F playground dev",
-    "playground:build": "pnpm -F playground build",
+    "playground:build": "pnpm -F playground generate",
     "docs:dev": "pnpm -F docs dev",
     "docs:build": "pnpm -F docs build",
     "deps": "taze major -I",

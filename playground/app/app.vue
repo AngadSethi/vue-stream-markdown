@@ -2,7 +2,7 @@
 import type { CodeOptions, MermaidOptions, SelectOption, ShikiOptions } from 'vue-stream-markdown'
 import { throttle } from '@antfu/utils'
 import { useCycleList, useResizeObserver } from '@vueuse/core'
-import { decompressFromEncodedURIComponent } from 'lz-string'
+import * as LZString from 'lz-string'
 import { Markdown, SUPPORT_LANGUAGES } from 'vue-stream-markdown'
 import { ChartPie } from './icons'
 import { DEFAULT_MARKDOWN_PATH, getPresetContent } from './markdown'
@@ -122,7 +122,7 @@ async function initContent() {
   const compressedContent = getContentFromUrl(location.href)
   try {
     if (compressedContent)
-      content.value = decompressFromEncodedURIComponent(compressedContent)
+      content.value = LZString.decompressFromEncodedURIComponent(compressedContent)
     else
       content.value = await getPresetContent(DEFAULT_MARKDOWN_PATH)
   }

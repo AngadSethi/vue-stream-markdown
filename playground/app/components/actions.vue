@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Action } from '../types'
 import { useClipboard } from '@vueuse/core'
-import { compressToEncodedURIComponent } from 'lz-string'
+import * as LZString from 'lz-string'
 import { homepage } from '../../../package.json'
 import {
   BookOpenText,
@@ -76,7 +76,7 @@ const actions = computed((): Action[] => {
         if (!props.content)
           return
 
-        const compressed = compressToEncodedURIComponent(props.content)
+        const compressed = LZString.compressToEncodedURIComponent(props.content)
         copy(`${location.origin}?content=${compressed}`)
 
         const url = new URL(location.href)
