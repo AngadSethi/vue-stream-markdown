@@ -110,11 +110,13 @@ export type PreviewSegmentedPlacement = 'left' | 'center' | 'right' | 'auto'
 
 export type PreviewerConfig
   = | boolean
-    | ({
+    | {
       placement?: PreviewSegmentedPlacement
-      mermaid?: boolean | Component
-      html?: boolean | Component
-    } & Omit<Record<string, Component>, 'placement' | 'mermaid' | 'html'>)
+      components?: {
+        mermaid?: boolean | Component
+        html?: boolean | Component
+      } & Record<string, Component>
+    }
 
 export interface ShikiOptions {
   theme?: [BuiltinTheme, BuiltinTheme]

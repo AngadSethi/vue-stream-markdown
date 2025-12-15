@@ -244,7 +244,9 @@ onMounted(() => {
           :code-options="codeOptions"
           :mermaid-options="mermaidOptions"
           :previewers="{
-            echarts: EChartsPreviewer,
+            components: {
+              echarts: EChartsPreviewer,
+            },
           }"
         />
       </div>

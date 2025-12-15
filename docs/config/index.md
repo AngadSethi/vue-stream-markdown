@@ -241,16 +241,11 @@ Configuration for preview components. Set to `false` to disable all previewers, 
 
 The `PreviewerConfig` is an object that can contain:
 - `placement?: 'left' | 'center' | 'right' | 'auto'` - Position of the preview component relative to the code block (default: `'auto'`)
-- Language-specific keys (e.g., `'html'`, `'mermaid'`, `'javascript'`, etc.) with values that are either `boolean` (to enable/disable default previewers) or `Component` (to provide a custom previewer component)
+- `components?: Record<string, Component>` - Object containing language-specific previewer configurations
+  - For `html` and `mermaid`: `boolean` (to enable/disable default previewers) or `Component` (to provide a custom previewer component)
+  - For all other languages: `Component` only (no built-in previewers available)
 
 By default, only `html` and `mermaid` have built-in previewers. For other languages, you need to explicitly configure custom previewer components.
-
-#### Examples
-
-- `placement: 'right'` - Position preview component on the right side
-- `html: boolean | Component` - Enable/disable HTML previewer or provide a custom component
-- `mermaid: boolean | Component` - Enable/disable Mermaid previewer or provide a custom component
-- `javascript: Component` - Custom previewer component for JavaScript
 
 ### shikiOptions
 

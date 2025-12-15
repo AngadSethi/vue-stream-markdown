@@ -61,13 +61,17 @@ graph TD
 const disableAllPreviewers = false
 
 const disableHtmlPreviewer = {
-  html: false,
-  mermaid: true,
+  components: {
+    html: false,
+    mermaid: true,
+  },
 }
 
 const disableMermaidPreviewer = {
-  html: true,
-  mermaid: false,
+  components: {
+    html: true,
+    mermaid: false,
+  },
 }
 </script>
 
@@ -87,18 +91,18 @@ Configuration for code block previewers. Set to `false` to disable all previewer
 ```typescript
 type PreviewerConfig
   = | boolean
-    | ({
+    | {
       placement?: PreviewSegmentedPlacement
-      mermaid?: boolean | Component
-      html?: boolean | Component
-    } & {
-      [key: string]: Component
-    })
+      components?: {
+        mermaid?: boolean | Component
+        html?: boolean | Component
+      } & Record<string, Component>
+    }
 ```
 
 The `PreviewerConfig` is an object that can contain:
 - **placement**: Optional placement configuration for preview components (see [placement](#placement) section below)
-- **Language-specific keys**: The language identifier (e.g., `'html'`, `'mermaid'`, `'javascript'`, `'python'`, `'vue'`, etc.)
+- **components**: Optional object containing language-specific previewer configurations
   - For `html` and `mermaid`: `boolean` (to enable/disable default previewer) or `Component` (custom previewer)
   - For all other languages: `Component` only (no built-in previewers available)
 
@@ -123,9 +127,9 @@ Controls the position of the preview component relative to the code block in the
 - **`'left'`**: Preview component appears on the left side of the code block
 - **`'center'`**: Preview component appears in the center (between code and other content)
 - **`'right'`**: Preview component appears on the right side of the code block
-- **`'auto'`**: Automatically determines placement based on whether the code block has a language title:
-  - If language title is shown: uses `'center'`
-  - If no language title: uses `'left'`
+- **`'auto'`**: Automatically determines placement based on whether the code block has a language icon or language name:
+  - If language icon or language name is shown: uses `'center'`
+  - If neither is shown: uses `'left'`
 
 ### Examples
 
@@ -138,44 +142,6 @@ import { Markdown } from 'vue-stream-markdown'
 
 const previewers: PreviewerConfig = {
   placement: 'right',
-  html: true,
-  mermaid: true,
-}
-</script>
-
-<template>
-  <Markdown :content="content" :previewers="previewers" />
-</template>
-```
-
-**Set placement to center:**
-
-```vue
-<script setup lang="ts">
-import type { PreviewerConfig } from 'vue-stream-markdown'
-import { Markdown } from 'vue-stream-markdown'
-
-const previewers: PreviewerConfig = {
-  placement: 'center',
-  html: true,
-}
-</script>
-
-<template>
-  <Markdown :content="content" :previewers="previewers" />
-</template>
-```
-
-**Use auto placement (default):**
-
-```vue
-<script setup lang="ts">
-import type { PreviewerConfig } from 'vue-stream-markdown'
-import { Markdown } from 'vue-stream-markdown'
-
-const previewers: PreviewerConfig = {
-  placement: 'auto', // or omit this property
-  html: true,
 }
 </script>
 
@@ -186,10 +152,10 @@ const previewers: PreviewerConfig = {
 
 ## html
 
-- **Type:** `boolean | Component | undefined`
-- **Default:** `true` (HTML previewer enabled)
+- **Type:** `boolean | Component | undefined` (within `components` object)
+- **Default:** `true` (HTML previewer enabled when `previewers` is `true`)
 
-Controls the HTML previewer for HTML code blocks. When set to `true`, the default HTML previewer is used, which renders HTML content in a sandboxed iframe. When set to `false`, the previewer is disabled and only the code is shown. When set to a Vue component, that component is used as the custom previewer.
+Controls the HTML previewer for HTML code blocks. This option must be specified within the `components` object. When set to `true`, the default HTML previewer is used, which renders HTML content in a sandboxed iframe. When set to `false`, the previewer is disabled and only the code is shown. When set to a Vue component, that component is used as the custom previewer.
 
 The default HTML previewer renders HTML content in a sandboxed iframe with `allow-scripts` and `allow-same-origin` permissions, allowing the HTML to execute JavaScript while maintaining security isolation. The iframe automatically adjusts its height based on the content.
 
@@ -205,8 +171,9 @@ import type { PreviewerConfig } from 'vue-stream-markdown'
 import { Markdown } from 'vue-stream-markdown'
 
 const previewers: PreviewerConfig = {
-  html: false,
-  mermaid: true,
+  components: {
+    html: false,
+  },
 }
 </script>
 
@@ -224,7 +191,9 @@ import { Markdown } from 'vue-stream-markdown'
 import CustomHtmlPreviewer from './CustomHtmlPreviewer.vue'
 
 const previewers: PreviewerConfig = {
-  html: CustomHtmlPreviewer, // Custom component
+  components: {
+    html: CustomHtmlPreviewer, // Custom component
+  },
 }
 </script>
 
@@ -237,10 +206,10 @@ When using a custom component, it will receive the same props as the default HTM
 
 ## mermaid
 
-- **Type:** `boolean | Component | undefined`
-- **Default:** `true` (Mermaid previewer enabled)
+- **Type:** `boolean | Component | undefined` (within `components` object)
+- **Default:** `true` (Mermaid previewer enabled when `previewers` is `true`)
 
-Controls the Mermaid previewer for Mermaid code blocks. When set to `true`, the default Mermaid previewer is used, which renders Mermaid diagrams as SVG. When set to `false`, the previewer is disabled and only the code is shown. When set to a Vue component, that component is used as the custom previewer.
+Controls the Mermaid previewer for Mermaid code blocks. This option must be specified within the `components` object. When set to `true`, the default Mermaid previewer is used, which renders Mermaid diagrams as SVG. When set to `false`, the previewer is disabled and only the code is shown. When set to a Vue component, that component is used as the custom previewer.
 
 The default Mermaid previewer automatically renders Mermaid diagrams with support for:
 - Dark mode theming (automatically switches based on `isDark` prop)
@@ -262,8 +231,9 @@ import type { PreviewerConfig } from 'vue-stream-markdown'
 import { Markdown } from 'vue-stream-markdown'
 
 const previewers: PreviewerConfig = {
-  html: true,
-  mermaid: false,
+  components: {
+    mermaid: false,
+  },
 }
 </script>
 
@@ -281,7 +251,9 @@ import { Markdown } from 'vue-stream-markdown'
 import CustomMermaidPreviewer from './CustomMermaidPreviewer.vue'
 
 const previewers: PreviewerConfig = {
-  mermaid: CustomMermaidPreviewer, // Custom component
+  components: {
+    mermaid: CustomMermaidPreviewer, // Custom component
+  },
 }
 </script>
 
@@ -320,7 +292,9 @@ import { Markdown } from 'vue-stream-markdown'
 import JavaScriptPreviewer from './JavaScriptPreviewer.vue'
 
 const previewers: PreviewerConfig = {
-  javascript: JavaScriptPreviewer,
+  components: {
+    javascript: JavaScriptPreviewer,
+  },
 }
 </script>
 

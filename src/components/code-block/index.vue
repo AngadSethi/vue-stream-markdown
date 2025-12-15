@@ -101,7 +101,7 @@ const previewable = computed((): boolean => {
   }
 
   if (typeof previewers.value === 'object') {
-    if (previewers.value[language.value] === false)
+    if (previewers.value.components?.[language.value] === false)
       return false
 
     if (language.value === 'html' && html)
@@ -110,7 +110,7 @@ const previewable = computed((): boolean => {
       return true
 
     // Custom previewer component, load when is completed
-    const component = previewers.value[language.value]
+    const component = previewers.value.components?.[language.value]
     if (typeof component === 'object' && !props.node.loading)
       return !!component
 
@@ -125,7 +125,7 @@ const PreviewComponent = computed((): Component | undefined => {
   if (!previewers.value || typeof previewers.value === 'boolean')
     return previewer
 
-  const data = previewers.value[language.value]
+  const data = previewers.value.components?.[language.value]
   if (data === false)
     return previewer
 
