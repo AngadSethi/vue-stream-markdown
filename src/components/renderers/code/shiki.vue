@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TokensResult } from 'shiki'
 import type { CodeNodeRendererProps } from '../../../types'
+import { useResizeObserver } from '@vueuse/core'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
 import { useCodeOptions, useShiki } from '../../../composables'
 import VanillaRenderer from './vanilla'
@@ -27,6 +28,14 @@ const { codeToTokens } = useShiki({
 
 const tokens = ref<TokensResult>()
 
+const vanillaRef = ref()
+const minHeight = ref<number>()
+const element = computed(() => vanillaRef.value?.$el)
+
+const observer = useResizeObserver(element, () => {
+  minHeight.value = element.value?.clientHeight
+})
+
 watch(
   () => [
     code.value,
@@ -35,17 +44,28 @@ watch(
   ],
   async () => {
     tokens.value = await codeToTokens(code.value)
+    observer.stop()
   },
   { immediate: true },
 )
 </script>
 
 <template>
-  <ShikiTokensRenderer
-    v-if="tokens"
-    data-stream-markdown="code"
-    :data-show-line-numbers="showLineNumbers"
-    :tokens="tokens"
-  />
-  <VanillaRenderer v-else v-bind="props" />
+  <Transition name="code-fade" mode="out-in">
+    <div
+      v-if="tokens"
+      data-stream-markdown="shiki"
+      :style="{
+        minHeight: minHeight ? `${minHeight}px` : undefined,
+      }"
+    >
+      <ShikiTokensRenderer
+        data-stream-markdown="code"
+        :data-show-line-numbers="showLineNumbers"
+        :tokens="tokens"
+      />
+    </div>
+
+    <VanillaRenderer v-else ref="vanillaRef" v-bind="props" />
+  </Transition>
 </template>

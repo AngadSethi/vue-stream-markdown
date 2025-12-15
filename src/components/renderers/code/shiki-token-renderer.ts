@@ -8,43 +8,51 @@ export default defineComponent({
   props: {
     tokens: {
       type: Object as PropType<TokensResult>,
-      required: true,
+      required: false,
     },
   },
   setup(props) {
-    return () => h(
-      'pre',
-      {
-        'class': [
-          'shiki',
-          props.tokens.themeName,
-        ],
-        'data-language': props.tokens.grammarState?.lang,
-        'style': {
-          counterReset: 'line',
+    if (!props.tokens)
+      return null
+
+    return () => {
+      if (!props.tokens?.tokens)
+        return null
+
+      return h(
+        'pre',
+        {
+          'class': [
+            'shiki',
+            props.tokens.themeName,
+          ],
+          'data-language': props.tokens.grammarState?.lang,
+          'style': {
+            counterReset: 'line',
+          },
         },
-      },
-      h(
-        'code',
-        renderList(
-          props.tokens.tokens,
-          (line, index) => h(
-            'div',
-            {
-              'data-stream-markdown': 'code-line',
-              'key': index,
-            },
-            renderList(line, (token, tokenIndex) => h(
-              'span',
+        h(
+          'code',
+          renderList(
+            props.tokens.tokens,
+            (line, index) => h(
+              'div',
               {
-                key: tokenIndex,
-                style: token.htmlStyle || getTokenStyleObject(token),
+                'data-stream-markdown': 'code-line',
+                'key': index,
               },
-              token.content,
-            )),
+              renderList(line, (token, tokenIndex) => h(
+                'span',
+                {
+                  key: tokenIndex,
+                  style: token.htmlStyle || getTokenStyleObject(token),
+                },
+                token.content,
+              )),
+            ),
           ),
         ),
-      ),
-    )
+      )
+    }
   },
 })

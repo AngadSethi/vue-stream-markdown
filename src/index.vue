@@ -7,6 +7,7 @@ import { useContext, useKatex, useMermaid, useShiki } from './composables'
 import { ICONS } from './constants'
 import { loadLocaleMessages } from './locales'
 import { MarkdownParser } from './markdown-parser'
+import { preloadAsyncComponents } from './utils'
 
 const props = withDefaults(defineProps<StreamMarkdownProps>(), {
   mode: 'streaming',
@@ -65,9 +66,16 @@ const { preload: preloadMermaid, dispose: disposeMermaid } = useMermaid({
 const { preload: preloadKatex, dispose: disposeKatex } = useKatex()
 
 async function bootstrap() {
-  const tasks = [preloadShiki(), preloadMermaid(), preloadKatex()]
+  const tasks = [
+    preloadShiki(), // init shiki highlighter
+    preloadMermaid(), // init mermaid instance
+    preloadKatex(), // dynamic load katex css
+    preloadAsyncComponents(icons.value), // preload conventional icons
+  ]
+
   if (props.locale !== 'en-US')
     tasks.push(loadLocaleMessages(props.locale))
+
   await Promise.all(tasks)
 }
 
