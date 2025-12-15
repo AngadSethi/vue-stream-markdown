@@ -1,11 +1,10 @@
-import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
 
 export * from './previewers'
 export * from './renderers'
 
 /// keep-sorted
-export const UI: Record<string, Component> = {
+export const UI = {
   Button: defineAsyncComponent(() => import('./button.vue')),
   CodeBlock: defineAsyncComponent(() => import('./code-block/index.vue')),
   Dropdown: defineAsyncComponent(() => import('./dropdown.vue')),
@@ -19,4 +18,4 @@ export const UI: Record<string, Component> = {
   Table: defineAsyncComponent(() => import('./table.vue')),
   Tooltip: defineAsyncComponent(() => import('./tooltip.vue')),
   ZoomContainer: defineAsyncComponent(() => import('./zoom-container.vue')),
-}
+} as const

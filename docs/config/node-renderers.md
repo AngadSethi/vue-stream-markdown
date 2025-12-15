@@ -151,6 +151,34 @@ const nodeRenderers: NodeRenderers = {
 </template>
 ```
 
+## Preloading Renderers
+
+By default, lightweight node renderers are preloaded to improve initial rendering performance. The preload happens **after** merging your custom renderers, ensuring that the preloaded components match your final renderer configuration.
+
+### Default Preloaded Renderers
+
+All node renderers are preloaded by default except `code` and `math`, which are heavier components that are loaded on-demand.
+
+### Custom Preload Configuration
+
+You can customize which renderers to preload using the `preload` prop:
+
+```vue
+<script setup lang="ts">
+import { StreamMarkdown } from 'vue-stream-markdown'
+
+const preload = {
+  nodeRenderers: ['heading', 'paragraph', 'text'] as const,
+}
+</script>
+
+<template>
+  <StreamMarkdown :content="content" :preload="preload" />
+</template>
+```
+
+If `preload.nodeRenderers` is not specified, the default list above is used. Set it to an empty array to disable preloading.
+
 ## Notes
 
 - Custom renderers are merged with default renderers, so you only need to specify the ones you want to override

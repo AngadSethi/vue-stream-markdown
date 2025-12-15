@@ -76,6 +76,10 @@ This approach ensures that:
 - Code blocks update smoothly as content streams in
 - Large code blocks avoid expensive full re-renders
 
+## Renderer Preloading
+
+Lightweight node renderers are preloaded by default to reduce initial rendering latency. The preload happens after merging custom renderers, ensuring that preloaded components match your final configuration. You can customize which renderers to preload using the `preload` prop.
+
 ## Performance Summary
 
 vue-stream-markdown's performance optimizations provide:
@@ -83,5 +87,6 @@ vue-stream-markdown's performance optimizations provide:
 - **Incremental Rendering** - Only new or changed blocks are processed, maintaining a stable AST structure
 - **Stable Output** - Completed blocks remain stable and don't re-render, with nodes cached by Vue
 - **Minimal Overhead** - Parsing and rendering work is minimized through lazy parsing, selective updates, and efficient Vue reactivity diffing
+- **Renderer Preloading** - Lightweight renderers are preloaded to reduce initial rendering latency
 
 This makes vue-stream-markdown particularly well-suited for AI chat interfaces with streaming responses, real-time collaborative editing, and progressive content loading scenarios.

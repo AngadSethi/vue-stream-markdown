@@ -23,4 +23,4 @@ export const NODE_RENDERERS: NodeRenderers = {
   text: defineAsyncComponent(() => import('./text.vue')),
   thematicBreak: defineAsyncComponent(() => import('./thematic-break.vue')),
   yaml: defineAsyncComponent(() => import('./yaml.vue')),
-}
+} as const

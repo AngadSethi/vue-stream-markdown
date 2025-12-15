@@ -69,6 +69,7 @@ export default defineNuxtConfig({
 - `enableAnimate` (boolean | undefined): Enable typewriter animation effect. When `undefined`, automatically enabled in `'streaming'` mode and disabled in `'static'` mode
 - `isDark` (boolean): Enable dark mode
 - `locale` (string | LocaleConfig): Locale for internationalization, defaults to `'en-US'`
+- `preload` (PreloadConfig): Configure which node renderers to preload for better initial rendering performance
 
 ### Code Highlighting
 

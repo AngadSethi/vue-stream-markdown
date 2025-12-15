@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Icons, NodeRenderers, StreamMarkdownProps } from './types'
+import type { BuiltinNodeRenderers, Icons, NodeRenderers, StreamMarkdownProps } from './types'
 import { computed, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 import NodeList from './components/node-list.vue'
 import { NODE_RENDERERS } from './components/renderers'
 import { useContext, useKatex, useMermaid, useShiki } from './composables'
-import { ICONS } from './constants'
+import { ICONS, PRELOAD_NODE_RENDERER } from './constants'
 import { loadLocaleMessages } from './locales'
 import { MarkdownParser } from './markdown-parser'
 import { preloadAsyncComponents } from './utils'
@@ -48,6 +48,12 @@ const nodeRenderers = computed((): NodeRenderers => ({
   ...props.nodeRenderers,
 }))
 
+const preloadNodeRenderers = computed((): BuiltinNodeRenderers[] => {
+  if (!props.preload || !props.preload.nodeRenderers)
+    return PRELOAD_NODE_RENDERER
+  return props.preload.nodeRenderers
+})
+
 const icons = computed((): Icons => ({
   ...ICONS,
   ...props.icons,
@@ -75,6 +81,9 @@ async function bootstrap() {
 
   if (props.locale !== 'en-US')
     tasks.push(loadLocaleMessages(props.locale))
+
+  if (preloadNodeRenderers.value.length)
+    tasks.push(preloadAsyncComponents(nodeRenderers.value, preloadNodeRenderers.value))
 
   await Promise.all(tasks)
 }

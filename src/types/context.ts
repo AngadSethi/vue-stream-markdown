@@ -9,15 +9,20 @@ import type { Component } from 'vue'
 import type { NodeRenderers, SyntaxTree } from './core'
 import type { LocaleConfig } from './locale'
 import type { CodeNodeRendererProps, ImageNodeRendererProps, TableNodeRendererProps } from './renderer'
-import type { ControlTransformer, Icons } from './shared'
+import type { BuiltinNodeRenderers, ControlTransformer, Icons } from './shared'
 
 export interface StreamMarkdownProps extends StreamMarkdownContext, MarkdownParserOptions {
   mode?: 'static' | 'streaming'
   content?: string
   nodeRenderers?: NodeRenderers
   icons?: Partial<Icons>
+  preload?: PreloadConfig
   locale?: string | LocaleConfig
   enableAnimate?: boolean
+}
+
+export interface PreloadConfig {
+  nodeRenderers?: BuiltinNodeRenderers[]
 }
 
 export interface MarkdownParserOptions {

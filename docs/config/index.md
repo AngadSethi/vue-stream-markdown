@@ -41,6 +41,18 @@ The markdown content to render.
 
 Custom node renderers to override default rendering behavior for specific node types.
 
+### preload
+
+- **Type:** `PreloadConfig`
+
+Configuration for preloading node renderers to improve initial rendering performance.
+
+#### nodeRenderers
+
+- **Type:** `BuiltinNodeRenderers[]`
+
+List of node renderer types to preload. If not specified, a default list of lightweight renderers is preloaded. Preloading happens after merging custom renderers, ensuring the preloaded components match your final configuration.
+
 ### icons
 
 - **Type:** `Partial<Icons>`

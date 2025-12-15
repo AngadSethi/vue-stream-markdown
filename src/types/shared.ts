@@ -1,6 +1,11 @@
 import type { Component, CSSProperties } from 'vue'
+import type { NODE_RENDERERS, UI } from '../components'
 import type { ICONS } from '../constants'
 import type { NodeRendererProps } from './renderer'
+
+export type BuiltinNodeRenderers = keyof typeof NODE_RENDERERS
+export type BuiltinPreviewers = 'mermaid' | 'html'
+export type BuiltinUIComponents = keyof typeof UI
 
 export type OptionalIconName = 'flipVertical' | 'rotateRight' | 'arrowRight'
 
