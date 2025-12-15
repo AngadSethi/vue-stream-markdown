@@ -37,6 +37,13 @@ pnpm add vue-stream-markdown
 
 ## Usage
 
+> [!IMPORTANT]
+> 🚧 **vue-stream-markdown** is currently in active feature development.
+>
+> Breaking changes are avoided as much as possible, but the project maintains a relatively high release frequency.
+>
+> If a version meets your needs, you don't need to always follow the latest version.
+
 For detailed usage and API documentation, please refer to the [Documentation](https://docs-vue-stream-markdown.netlify.app/).
 
 ```vue

@@ -4,6 +4,7 @@ import { defineAsyncComponent } from 'vue'
 /// keep-sorted
 export const NODE_RENDERERS: NodeRenderers = {
   blockquote: defineAsyncComponent(() => import('./blockquote.vue')),
+  break: defineAsyncComponent(() => import('./break.vue')),
   code: defineAsyncComponent(() => import('./code/index.vue')),
   delete: defineAsyncComponent(() => import('./delete.vue')),
   emphasis: defineAsyncComponent(() => import('./emphasis.vue')),

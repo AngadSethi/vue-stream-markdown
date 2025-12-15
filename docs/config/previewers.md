@@ -87,12 +87,18 @@ Configuration for code block previewers. Set to `false` to disable all previewer
 ```typescript
 type PreviewerConfig
   = | boolean
-    | Record<string, boolean | Component>
+    | ({
+      placement?: PreviewSegmentedPlacement
+      mermaid?: boolean | Component
+      html?: boolean | Component
+    } & {
+      [key: string]: Component
+    })
 ```
 
-The `PreviewerConfig` is a record where:
-- **Key**: The language identifier (e.g., `'html'`, `'mermaid'`, `'javascript'`, `'python'`, `'vue'`, etc.)
-- **Value**:
+The `PreviewerConfig` is an object that can contain:
+- **placement**: Optional placement configuration for preview components (see [placement](#placement) section below)
+- **Language-specific keys**: The language identifier (e.g., `'html'`, `'mermaid'`, `'javascript'`, `'python'`, `'vue'`, etc.)
   - For `html` and `mermaid`: `boolean` (to enable/disable default previewer) or `Component` (custom previewer)
   - For all other languages: `Component` only (no built-in previewers available)
 
@@ -104,6 +110,79 @@ When `previewers` is set to `true`:
 - All other languages have no previewer by default
 
 To add previewers for other languages, you must explicitly configure them with custom components.
+
+## placement
+
+- **Type:** `'left' | 'center' | 'right' | 'auto'`
+- **Default:** `'auto'`
+
+Controls the position of the preview component relative to the code block in the segmented view. The preview component can be displayed on the left, center, or right side of the code block.
+
+### Placement Options
+
+- **`'left'`**: Preview component appears on the left side of the code block
+- **`'center'`**: Preview component appears in the center (between code and other content)
+- **`'right'`**: Preview component appears on the right side of the code block
+- **`'auto'`**: Automatically determines placement based on whether the code block has a language title:
+  - If language title is shown: uses `'center'`
+  - If no language title: uses `'left'`
+
+### Examples
+
+**Set placement to right:**
+
+```vue
+<script setup lang="ts">
+import type { PreviewerConfig } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const previewers: PreviewerConfig = {
+  placement: 'right',
+  html: true,
+  mermaid: true,
+}
+</script>
+
+<template>
+  <Markdown :content="content" :previewers="previewers" />
+</template>
+```
+
+**Set placement to center:**
+
+```vue
+<script setup lang="ts">
+import type { PreviewerConfig } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const previewers: PreviewerConfig = {
+  placement: 'center',
+  html: true,
+}
+</script>
+
+<template>
+  <Markdown :content="content" :previewers="previewers" />
+</template>
+```
+
+**Use auto placement (default):**
+
+```vue
+<script setup lang="ts">
+import type { PreviewerConfig } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const previewers: PreviewerConfig = {
+  placement: 'auto', // or omit this property
+  html: true,
+}
+</script>
+
+<template>
+  <Markdown :content="content" :previewers="previewers" />
+</template>
+```
 
 ## html
 

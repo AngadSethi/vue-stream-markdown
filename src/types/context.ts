@@ -106,14 +106,15 @@ export type ControlsConfig
       mermaid?: boolean | MermaidControlsConfig
     }
 
+export type PreviewSegmentedPlacement = 'left' | 'center' | 'right' | 'auto'
+
 export type PreviewerConfig
   = | boolean
     | ({
+      placement?: PreviewSegmentedPlacement
       mermaid?: boolean | Component
       html?: boolean | Component
-    } & {
-      [key: string]: Component
-    })
+    } & Omit<Record<string, Component>, 'placement' | 'mermaid' | 'html'>)
 
 export interface ShikiOptions {
   theme?: [BuiltinTheme, BuiltinTheme]

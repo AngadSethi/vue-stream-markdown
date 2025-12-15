@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BuiltinLanguage } from 'shiki'
 import type { Component } from 'vue'
-import type { CodeNodeRendererProps, Control, SelectOption } from '../../types'
+import type { CodeNodeRendererProps, Control, PreviewSegmentedPlacement, SelectOption } from '../../types'
 import { createReusableTemplate, useClipboard } from '@vueuse/core'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
 import { useCodeOptions, useContext, useControls, useI18n, useMermaid } from '../../composables'
@@ -74,6 +74,15 @@ const icon = computed(() => {
   if (typeof custom === 'object')
     return custom
   return LANGUAGE_ICONS[language.value] || LANGUAGE_ICONS.text
+})
+
+const previewPlacement = computed((): PreviewSegmentedPlacement => {
+  if (typeof previewers.value === 'boolean'
+    || !previewers.value?.placement
+    || previewers.value?.placement === 'auto') {
+    return showLanguageTitle.value ? 'center' : 'left'
+  }
+  return previewers.value.placement
 })
 
 const previewable = computed((): boolean => {
@@ -227,7 +236,7 @@ watch(
 </script>
 
 <template>
-  <DefineTemplate>
+  <DefineTemplate v-slot="{ showPreview }">
     <LanguageTitle
       v-if="showLanguageTitle"
       :icon="icon"
@@ -236,7 +245,7 @@ watch(
       :show-name="showLanguageName"
     />
     <PreviewSegmented
-      v-else-if="previewable"
+      v-else-if="previewable && showPreview"
       v-model:mode="mode"
       v-model:collapsed="collapsed"
     />
@@ -253,12 +262,12 @@ watch(
   >
     <header data-stream-markdown="code-block-header">
       <slot name="title">
-        <ReuseTemplate />
+        <ReuseTemplate :show-preview="previewPlacement === 'left'" />
       </slot>
 
       <slot name="header-center">
         <PreviewSegmented
-          v-if="previewable && showLanguageTitle"
+          v-if="previewable && previewPlacement === 'center'"
           v-model:mode="mode"
           v-model:collapsed="collapsed"
         />
@@ -266,7 +275,14 @@ watch(
       </slot>
 
       <slot name="actions">
-        <Actions :actions="headerControls" />
+        <div data-stream-markdown="actions">
+          <PreviewSegmented
+            v-if="previewable && previewPlacement === 'right'"
+            v-model:mode="mode"
+            v-model:collapsed="collapsed"
+          />
+          <Actions :actions="headerControls" />
+        </div>
       </slot>
     </header>
 
@@ -291,19 +307,26 @@ watch(
       }"
     >
       <template #title>
-        <ReuseTemplate />
+        <ReuseTemplate :show-preview="previewPlacement === 'left'" />
       </template>
 
       <template #header-center>
         <PreviewSegmented
-          v-if="previewable && showLanguageTitle"
+          v-if="previewable && previewPlacement === 'center'"
           v-model:mode="mode"
           v-model:collapsed="collapsed"
         />
       </template>
 
       <template #actions>
-        <Actions :actions="modalControls" />
+        <div data-stream-markdown="actions">
+          <PreviewSegmented
+            v-if="previewable && previewPlacement === 'right'"
+            v-model:mode="mode"
+            v-model:collapsed="collapsed"
+          />
+          <Actions :actions="modalControls" />
+        </div>
       </template>
 
       <component
