@@ -76,6 +76,21 @@ const icon = computed(() => {
   return LANGUAGE_ICONS[language.value] || LANGUAGE_ICONS.text
 })
 
+const progressiveRender = computed(() => {
+  if (typeof previewers.value === 'boolean') {
+    if (language.value === 'mermaid')
+      return true
+    return false
+  }
+
+  const data = previewers.value?.progressive?.[language.value]
+  if (typeof data === 'boolean')
+    return data
+  if (language.value === 'mermaid')
+    return true
+  return false
+})
+
 const previewPlacement = computed((): PreviewSegmentedPlacement => {
   if (typeof previewers.value === 'boolean'
     || !previewers.value?.placement
@@ -87,6 +102,9 @@ const previewPlacement = computed((): PreviewSegmentedPlacement => {
 
 const previewable = computed((): boolean => {
   if (previewers.value === false)
+    return false
+
+  if (!progressiveRender.value && props.node.loading)
     return false
 
   const html = language.value === 'html' && !props.node.loading
@@ -109,9 +127,9 @@ const previewable = computed((): boolean => {
     if (language.value === 'mermaid' && mermaid)
       return true
 
-    // Custom previewer component, load when is completed
+    // Custom previewer component
     const component = previewers.value.components?.[language.value]
-    if (typeof component === 'object' && !props.node.loading)
+    if (typeof component === 'object' && (progressiveRender.value || !props.node.loading))
       return !!component
 
     return false

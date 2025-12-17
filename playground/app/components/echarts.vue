@@ -8,19 +8,35 @@ const props = defineProps<CodeNodeRendererProps>()
 
 const chartRef = ref<HTMLDivElement>()
 const chart = shallowRef<echarts.ECharts>()
+
 const code = computed(() => props.node.value.trim())
+const loading = computed(() => !!props.node.loading)
 
 const hasError = ref<boolean>(false)
 
 const data = ref<Record<string, unknown>>()
 
+function renderChart() {
+  if (!chartRef.value || !data.value)
+    return
+
+  chart.value = echarts.init(chartRef.value)
+  chart.value.setOption(data.value)
+}
+
 watch(
-  () => code.value,
+  () => [code.value, loading.value],
   () => {
+    if (loading.value)
+      return
+
     try {
       // If you have a better solution, I’d love to hear from you.
       // eslint-disable-next-line no-eval
       data.value = eval(`(${code.value})`)
+      nextTick(() => {
+        renderChart()
+      })
     }
     catch {
       hasError.value = true
@@ -29,22 +45,21 @@ watch(
   { immediate: true },
 )
 
-onMounted(() => {
-  if (!chartRef.value || !data.value)
-    return
-
-  chart.value = echarts.init(chartRef.value)
-  chart.value.setOption(data.value)
-})
-
 useResizeObserver(chartRef, () => {
   chart.value?.resize()
 })
 </script>
 
 <template>
-  <div>
-    <div ref="chartRef" class="h-100" />
+  <div class="flex items-center justify-center">
+    <div
+      ref="chartRef"
+      class="h-100 w-full"
+      :style="{
+        display: loading ? 'none' : 'block',
+      }"
+    />
+    <UI.Spin v-if="loading" />
     <UI.ErrorComponent v-if="hasError" />
   </div>
 </template>

@@ -93,6 +93,7 @@ type PreviewerConfig
   = | boolean
     | {
       placement?: PreviewSegmentedPlacement
+      progressive?: Record<string, boolean>
       components?: {
         mermaid?: boolean | Component
         html?: boolean | Component
@@ -102,6 +103,7 @@ type PreviewerConfig
 
 The `PreviewerConfig` is an object that can contain:
 - **placement**: Optional placement configuration for preview components (see [placement](#placement) section below)
+- **progressive**: Optional configuration for progressive rendering (see [progressive](#progressive) section below)
 - **components**: Optional object containing language-specific previewer configurations
   - For `html` and `mermaid`: `boolean` (to enable/disable default previewer) or `Component` (custom previewer)
   - For all other languages: `Component` only (no built-in previewers available)
@@ -110,10 +112,17 @@ The `PreviewerConfig` is an object that can contain:
 
 When `previewers` is set to `true`:
 - HTML code blocks use the default HTML previewer (sandboxed iframe)
-- Mermaid code blocks use the default Mermaid previewer (SVG rendering)
+- Mermaid code blocks use the default Mermaid previewer (SVG rendering) with progressive rendering enabled by default
 - All other languages have no previewer by default
 
 To add previewers for other languages, you must explicitly configure them with custom components.
+
+## progressive
+
+- **Type:** `Record<string, boolean>`
+- **Default:** `{ mermaid: true }`
+
+Controls progressive rendering for previewers. When enabled for a language, the preview component will be displayed even while the code block is still loading (streaming). The previewer component receives the `loading` prop to display loading states. When disabled, the preview component only appears after the code block has finished loading.
 
 ## placement
 
@@ -212,6 +221,7 @@ When using a custom component, it will receive the same props as the default HTM
 Controls the Mermaid previewer for Mermaid code blocks. This option must be specified within the `components` object. When set to `true`, the default Mermaid previewer is used, which renders Mermaid diagrams as SVG. When set to `false`, the previewer is disabled and only the code is shown. When set to a Vue component, that component is used as the custom previewer.
 
 The default Mermaid previewer automatically renders Mermaid diagrams with support for:
+- Progressive rendering (enabled by default, shows diagram as it streams in)
 - Dark mode theming (automatically switches based on `isDark` prop)
 - Zoom controls (configurable via `controls.mermaid`)
 - Responsive sizing (automatically adjusts height based on diagram dimensions)
@@ -268,7 +278,7 @@ When using a custom component, it will receive the same props as the default Mer
 
 For languages other than `html` and `mermaid`, you must provide a custom `Component` (boolean values are not accepted since there are no built-in previewers for these languages).
 
-The previewer component will receive `CodeNodeRendererProps`
+The previewer component will receive `CodeNodeRendererProps`, which includes the code block node data with `value` (code content) and `loading` (loading state) properties. If progressive rendering is enabled, handle the `loading` prop to show appropriate loading states.
 
 ```vue
 <!-- JavaScriptPreviewer.vue -->

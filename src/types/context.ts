@@ -112,6 +112,7 @@ export type PreviewerConfig
   = | boolean
     | {
       placement?: PreviewSegmentedPlacement
+      progressive?: Record<string, boolean>
       components?: {
         mermaid?: boolean | Component
         html?: boolean | Component

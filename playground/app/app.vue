@@ -250,6 +250,9 @@ onMounted(() => {
           :code-options="codeOptions"
           :mermaid-options="mermaidOptions"
           :previewers="{
+            progressive: {
+              echarts: true,
+            },
             components: {
               echarts: EChartsPreviewer,
             },
