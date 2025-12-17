@@ -7,6 +7,7 @@ const CONTEXT_KEY = Symbol('stream-markdown-context')
 interface Context {
   mode?: MaybeRef<'static' | 'streaming'>
   isDark?: MaybeRef<boolean>
+  hideTooltip?: MaybeRef<boolean>
   icons?: MaybeRef<Icons>
   enableAnimate?: MaybeRef<boolean | undefined>
   parsedNodes?: MaybeRef<ParsedNode[]>
@@ -18,6 +19,7 @@ export function useContext() {
   const context = injectContext()
 
   const mode = computed(() => unref(context.mode) ?? 'streaming')
+  const hideTooltip = computed(() => unref(context.hideTooltip) ?? false)
   const icons = computed((): Partial<Icons> => unref(context.icons) ?? {})
   const isDark = computed(() => unref(context.isDark) ?? false)
   const enableAnimate = computed(() => unref(context.enableAnimate))
@@ -38,6 +40,7 @@ export function useContext() {
     provideContext,
     injectContext,
     mode,
+    hideTooltip,
     icons,
     isDark,
     enableAnimate,

@@ -12,6 +12,7 @@ import { computed, ref, unref, watch, watchEffect } from 'vue'
 import { isClient } from '../utils'
 
 interface UseFloatingOptions {
+  hideTooltip?: MaybeRef<boolean>
   trigger?: MaybeRef<'hover' | 'click'>
   placement?: MaybeRef<Placement>
   delay?: MaybeRef<number | [number, number]>
@@ -19,6 +20,7 @@ interface UseFloatingOptions {
 }
 
 export function useFloating(options: UseFloatingOptions) {
+  const hideTooltip = computed(() => unref(options.hideTooltip) ?? false)
   const trigger = computed((): 'hover' | 'click' => unref(options.trigger) ?? 'hover')
   const placement = computed((): Placement => unref(options.placement) ?? 'top')
   const delay = computed((): number | [number, number] => unref(options.delay) ?? [100, 100])
@@ -132,6 +134,8 @@ export function useFloating(options: UseFloatingOptions) {
   }
 
   function onMouseEnter() {
+    if (hideTooltip.value)
+      return
     if (trigger.value === 'hover')
       show()
   }

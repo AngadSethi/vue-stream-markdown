@@ -2,6 +2,7 @@
 import type { Placement } from '@floating-ui/dom'
 import { toRefs } from 'vue'
 import { useFloating } from 'vue-stream-markdown'
+import { isMobile } from '../composables/use-mobile'
 
 defineOptions({
   inheritAttrs: false,
@@ -34,6 +35,7 @@ const {
   onFloatingEnter,
   onFloatingLeave,
 } = useFloating({
+  hideTooltip: isMobile,
   trigger,
   placement,
   delay,

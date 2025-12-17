@@ -425,6 +425,19 @@ Whether to display image captions.
 
 Custom component to display when image loading fails.
 
+### uiOptions
+
+- **Type:** `UIOptions`
+
+Configuration for UI interaction options, particularly for mobile devices.
+
+#### hideTooltip
+
+- **Type:** `boolean | undefined`
+- **Default:** `false`
+
+Hide tooltips triggered by hover interactions, while keeping dropdowns triggered by click interactions. Useful for mobile devices where hover interactions don't work well.
+
 ### isDark
 
 - **Type:** `boolean`

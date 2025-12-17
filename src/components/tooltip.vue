@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
 
 const { placement, delay, trigger } = toRefs(props)
 
-const { getContainer } = useContext()
+const { hideTooltip, getContainer } = useContext()
 
 const {
   referenceEl: _referenceEl,
@@ -36,6 +36,7 @@ const {
   onFloatingEnter,
   onFloatingLeave,
 } = useFloating({
+  hideTooltip,
   placement,
   delay,
   trigger,

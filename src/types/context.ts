@@ -49,6 +49,7 @@ export interface StreamMarkdownContext {
   hardenOptions?: HardenOptions
   codeOptions?: CodeOptions
   imageOptions?: ImageOptions
+  uiOptions?: UIOptions
   isDark?: boolean
 }
 
@@ -174,4 +175,13 @@ export interface HardenOptions {
   allowedProtocols?: string[]
   allowDataImages?: boolean
   errorComponent?: Component
+}
+
+export interface UIOptions {
+  /**
+   * Hide tooltips triggered by hover (but keep dropdowns triggered by click)
+   * Useful for mobile devices where hover interactions don't work well
+   * @default false
+   */
+  hideTooltip?: boolean
 }

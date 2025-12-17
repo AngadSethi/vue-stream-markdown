@@ -25,7 +25,14 @@ const emits = defineEmits<{
   (e: 'copied', content: string): void
 }>()
 
-const { mode, shikiOptions, mermaidOptions, isDark, enableAnimate } = toRefs(props)
+const {
+  mode,
+  shikiOptions,
+  mermaidOptions,
+  uiOptions,
+  isDark,
+  enableAnimate,
+} = toRefs(props)
 
 const containerRef = ref<HTMLDivElement>()
 
@@ -34,9 +41,10 @@ const { provideContext } = useContext()
 const markdownParser = new MarkdownParser({
   mode: props.mode,
   mdastOptions: props.mdastOptions,
-  postprocess: props.postprocess,
-  preprocess: props.preprocess,
   normalize: props.normalize,
+  preprocess: props.preprocess,
+  postprocess: props.postprocess,
+  extendMarkdownIt: props.extendMarkdownIt,
 })
 
 const processed = computed(() => markdownParser.parseMarkdown(props.content))
@@ -60,6 +68,8 @@ const icons = computed((): Icons => ({
   ...props.icons,
 }))
 
+const hideTooltip = computed(() => uiOptions.value?.hideTooltip ?? false)
+
 function getContainer(): HTMLElement | undefined {
   return containerRef.value
 }
@@ -77,7 +87,7 @@ async function bootstrap() {
     preloadShiki(), // init shiki highlighter
     preloadMermaid(), // init mermaid instance
     preloadKatex(), // dynamic load katex css
-    preloadAsyncComponents(icons.value), // preload conventional icons
+    preloadAsyncComponents(icons.value),
   ]
 
   if (props.locale !== 'en-US')
@@ -97,6 +107,7 @@ watch(() => props.locale, () => loadLocaleMessages(props.locale))
 provideContext({
   mode,
   icons,
+  hideTooltip,
   isDark,
   enableAnimate,
   parsedNodes,
