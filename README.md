@@ -96,6 +96,10 @@ If you encounter any problems, please:
 
 Please provide the shareable link, markdown content, and AST syntax tree when creating an issue. This will help me reproduce and diagnose the problem more effectively.
 
+## Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=jinghaihan/vue-stream-markdown)](https://github.com/jinghaihan/vue-stream-markdown/graphs/contributors)
+
 ## License
 
 [MIT](./LICENSE) License © [jinghaihan](https://github.com/jinghaihan)
