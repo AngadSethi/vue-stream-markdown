@@ -7,10 +7,6 @@ export default defineConfig({
       match: [/vitepress/],
       priority: 0,
     },
-    {
-      name: 'markdown',
-      match: [/remend/],
-    },
   ]),
   postRun: 'eslint --fix "**/package.json" "**/pnpm-workspace.yaml"',
 })

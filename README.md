@@ -72,7 +72,7 @@ This project also uses and benefits from:
 - [Shiki](https://shiki.style/) - Beautiful syntax highlighting
 - [Mermaid](https://mermaid.js.org/) - Diagramming and charting tool
 - [KaTeX](https://katex.org/) - Fast math typesetting library for the web
-- [Remend](https://github.com/vercel/streamdown/tree/main/packages/remend) - Intelligently parses and styles incomplete Markdown blocks
+- [Remend](https://github.com/vercel/streamdown/tree/main/packages/remend) - This project implements similar functionality inspired by remend for intelligently parsing and completing incomplete Markdown blocks.
 
 ### Code Sources
 - [markstream-vue](https://github.com/Simon-He95/markstream-vue) - The original inspiration for learning AST-based custom markdown rendering, and the source of the animation implementation used in this project

@@ -1,5 +1,4 @@
 import type { KatexOptions as KatexConfig } from 'katex'
-import type { MarkdownItAsync } from 'markdown-it-async'
 import type { Extension as FromMarkdownExtension } from 'mdast-util-from-markdown'
 import type { Options as ToMarkdownExtension } from 'mdast-util-to-markdown'
 import type { MermaidConfig } from 'mermaid'
@@ -31,7 +30,6 @@ export interface MarkdownParserOptions {
   postNormalize?: (data: SyntaxTree) => SyntaxTree
   preprocess?: (content: string) => string
   postprocess?: (data: SyntaxTree) => SyntaxTree
-  extendMarkdownIt?: (md: MarkdownItAsync) => void
 }
 
 export interface MdastOptions {

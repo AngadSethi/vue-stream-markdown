@@ -10,7 +10,4 @@ export default antfu({
   ignores: [
     'playground/app/markdown/**/code-blocks.md',
   ],
-  rules: {
-    'pnpm/yaml-enforce-settings': 'off',
-  },
 }).append(nuxt())

@@ -1,3 +1,9 @@
+catalogMode: prefer
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
 packages:
   - .
   - playground
@@ -39,9 +45,6 @@ catalogs:
     eslint-plugin-format: ^1.1.0
     lint-staged: ^16.2.7
     simple-git-hooks: ^2.13.1
-  markdown:
-    markdown-it-async: ^2.2.0
-    remend: ^1.0.1
   parser:
     mdast-util-from-markdown: ^2.0.2
     mdast-util-frontmatter: ^2.0.1

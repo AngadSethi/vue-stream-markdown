@@ -15,9 +15,9 @@ The [mdast](https://github.com/syntax-tree/mdast) (Markdown Abstract Syntax Tree
 - `mdast-util-math` - Handles mathematical expressions in the AST
 - `mdast-util-frontmatter` - Processes YAML frontmatter
 
-### Syntax Completion: remend
+### Syntax Completion: Internal Implementation
 
-[remend](https://github.com/vercel/streamdown/tree/main/packages/remend) is a library from the [streamdown](https://streamdown.ai/) project that intelligently parses and completes incomplete Markdown syntax blocks. It automatically detects and completes unterminated syntax, providing the foundation for streaming-friendly Markdown parsing.
+This project implements syntax completion functionality internally, inspired by [remend](https://github.com/vercel/streamdown/tree/main/packages/remend) from the [streamdown](https://streamdown.ai/) project. It intelligently parses and completes incomplete Markdown syntax blocks, automatically detecting and completing unterminated syntax to provide the foundation for streaming-friendly Markdown parsing.
 
 ### Complex Rendering Libraries
 
@@ -33,27 +33,22 @@ The [mdast](https://github.com/syntax-tree/mdast) (Markdown Abstract Syntax Tree
 
 [KaTeX](https://katex.org/) is a fast, self-contained library for rendering LaTeX mathematical expressions in the browser. It supports progressive rendering through throttling, making it well-suited for streaming scenarios.
 
-### Fallback Rendering: markdown-it-async
-
-[markdown-it-async](https://github.com/jinghaihan/markdown-it-async) serves as a fallback rendering mechanism for AST nodes that don't have dedicated renderers. It provides HTML rendering as a safety net, ensuring that all Markdown content can be rendered.
-
 ## Architecture Flow
 
 The rendering pipeline follows this general flow:
 
-1. **Preprocessing** - Custom syntax completion functions + `remend` handle incomplete syntax
+1. **Preprocessing** - Custom syntax completion functions handle incomplete syntax
 2. **Parsing** - `mdast-util-from-markdown` converts Markdown to AST
 3. **Postprocessing** - AST is processed and optimized for streaming
 4. **Rendering** - Vue components render each AST node type:
    - Specialized renderers for code (Shiki), diagrams (Mermaid), math (KaTeX)
-   - Fallback to `markdown-it-async` for unsupported node types
 
 ## Acknowledgments
 
 Special thanks to:
 
 - The [**mdast**](https://github.com/syntax-tree/mdast) ecosystem maintainers for providing a robust AST foundation
-- The [**streamdown**](https://streamdown.ai/) team and [**remend**](https://github.com/vercel/streamdown/tree/main/packages/remend) contributors for solving the hard problem of streaming Markdown parsing
+- The [**streamdown**](https://streamdown.ai/) team and [**remend**](https://github.com/vercel/streamdown/tree/main/packages/remend) contributors for the foundational ideas that inspired this project's syntax completion implementation
 - The [**Shiki**](https://shiki.style/) team for excellent syntax highlighting with streaming-friendly APIs
 - The [**Mermaid**](https://mermaid.js.org/) team for comprehensive diagram rendering capabilities
 - The [**KaTeX**](https://katex.org/) team for fast and reliable math rendering

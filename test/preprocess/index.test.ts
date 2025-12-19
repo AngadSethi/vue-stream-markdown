@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { normalize, preprocess } from '../../src/preprocess'
 import { getTestCases } from './test-cases'
-import { getFixtureFiles, readFixture } from './utils'
-
-const remend: boolean = false
+import { getFixtureFiles, getSnapshotPath, readFixture } from './utils'
 
 describe('normalize', () => {
   it('should convert LaTeX syntax and normalize content', () => {
@@ -15,14 +13,16 @@ describe('normalize', () => {
 describe('preprocess', () => {
   for (const testCase of getTestCases()) {
     it(testCase.description, () => {
-      expect(preprocess(testCase.input, remend)).toBe(testCase.expected)
+      expect(preprocess(testCase.input)).toBe(testCase.expected)
     })
   }
 
   for (const fixtureFile of getFixtureFiles()) {
     it(fixtureFile, () => {
       const fixture = readFixture(fixtureFile)
-      expect(preprocess(fixture, remend)).toBe(fixture)
+      const result = preprocess(fixture)
+      const snapshotPath = getSnapshotPath(fixtureFile)
+      expect(result).toMatchFileSnapshot(snapshotPath)
     })
   }
 })

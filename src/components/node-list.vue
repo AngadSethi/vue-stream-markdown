@@ -2,7 +2,6 @@
 import type { NodeRendererListProps, NodeType, ParsedNode } from '../types'
 import { computed } from 'vue'
 import { useContext } from '../composables'
-import Markdown from './markdown.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -30,7 +29,7 @@ const nodes = computed(() => props.nodes?.map((node, index) => ({
 const excludeTransition: NodeType[] = ['code']
 
 function getNodeComponent(node: ParsedNode) {
-  return props.nodeRenderers[node.type] || Markdown
+  return props.nodeRenderers[node.type] || null
 }
 
 function getNodeBindings(node: ParsedNode) {

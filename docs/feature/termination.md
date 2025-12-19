@@ -25,11 +25,11 @@ const syntaxTrimming = `Here is some text with a trailing \`\`\``
 
 # Enhanced Unterminated Block Parsing
 
-vue-stream-markdown builds upon the powerful unterminated block parsing capabilities from [remend](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md), a library maintained by the streamdown team. While remend handles most of the completion work for basic Markdown syntax (bold, italic, strikethrough, inline code, etc.), vue-stream-markdown implements more **aggressive** optimizations specifically for streaming scenarios.
+vue-stream-markdown implements powerful unterminated block parsing capabilities internally, inspired by [remend](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md) from the [streamdown](https://streamdown.ai/) project. vue-stream-markdown implements similar functionality with more **aggressive** optimizations specifically for streaming scenarios.
 
 ## Enhanced Features
 
-vue-stream-markdown extends remend's capabilities with enhanced handling for footnotes, links, images, tables, inline math, and syntax trimming. These enhancements provide better visual feedback and prevent broken interactions during streaming.
+vue-stream-markdown extends the remend-inspired functionality with enhanced handling for footnotes, links, images, tables, math, and syntax trimming. These enhancements provide better visual feedback and prevent broken interactions during streaming.
 
 ### Footnotes
 
@@ -60,7 +60,7 @@ vue-stream-markdown removes incomplete footnote references (`[^label]`) that don
 
 ### Links
 
-Unlike remend which extracts link text and displays it as plain text, vue-stream-markdown completes the link syntax while intelligently disabling click interactions:
+Unlike the original remend approach which extracts link text and displays it as plain text, vue-stream-markdown completes the link syntax while intelligently disabling click interactions:
 
 **Incomplete link (loading state):**
 ```markdown
@@ -85,7 +85,7 @@ Unlike remend which extracts link text and displays it as plain text, vue-stream
 
 ### Images
 
-While remend removes incomplete images entirely, vue-stream-markdown completes the image syntax and adds a loading state:
+While the original remend approach removes incomplete images entirely, vue-stream-markdown completes the image syntax and adds a loading state:
 
 **Incomplete image (loading state):**
 ```markdown
@@ -138,7 +138,7 @@ vue-stream-markdown proactively completes table syntax and provides a loading st
 
 ### Inline Math
 
-remend doesn't handle inline KaTeX with single `$` as they're likely currency symbols. vue-stream-markdown attempts to complete inline math syntax, providing better support for mathematical expressions in streaming content:
+The original remend approach doesn't handle inline KaTeX with single `$` as they're likely currency symbols. vue-stream-markdown attempts to complete inline math syntax, providing better support for mathematical expressions in streaming content:
 
 **Incomplete inline math (partial rendering):**
 ```markdown
@@ -222,4 +222,4 @@ Incomplete inline math expressions are completed and rendered with partial conte
 
 ## Acknowledgments
 
-This project is deeply inspired by [streamdown](https://streamdown.ai/) and the [remend](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md) library. Special thanks to the streamdown team for their innovative approach to streaming Markdown rendering and for maintaining remend, which handles the core unterminated block parsing for basic Markdown syntax. The foundation they laid has enabled vue-stream-markdown to focus on implementing more aggressive optimizations for enhanced user experience during streaming.
+This project is inspired by [streamdown](https://streamdown.ai/) and the [remend](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md) library for their foundational ideas on streaming Markdown parsing.

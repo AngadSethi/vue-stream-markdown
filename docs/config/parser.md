@@ -27,14 +27,12 @@ import {
   Markdown,
   preprocessContent,
   preprocessLaTeX,
-  preprocessThinkTag
 } from 'vue-stream-markdown'
 
 // Combine built-in functions
 const normalize = flow([
   preprocessContent, // Replace CRLF with LF, trim trailing spaces
   preprocessLaTeX, // Preprocess LaTeX syntax
-  preprocessThinkTag, // Preprocess think tags
   // Add your own functions
 ])
 </script>
@@ -50,7 +48,6 @@ The following functions are available for use in `normalize`:
 
 - `preprocessContent`: Replaces CRLF with LF and trims trailing spaces
 - `preprocessLaTeX`: Preprocesses LaTeX syntax (source code from [Dify](https://github.com/langgenius/dify))
-- `preprocessThinkTag`: Preprocesses think tags (source code from [Dify](https://github.com/langgenius/dify)). This function helps simplify the integration cost when using Dify, as it handles Dify's special think tag syntax (e.g., `<think>...</think>`) by converting them to HTML `<details>` elements
 
 ## preprocess
 
@@ -70,15 +67,14 @@ import {
   fixEmphasis,
   fixStrong,
   flow,
-  Markdown,
-  remend
+  Markdown
 } from 'vue-stream-markdown'
 
 // Custom preprocess with selective functions
 const preprocess = flow([
+  fixCode, // Fix incomplete code blocks
   fixStrong, // Fix incomplete strong (**bold**)
   fixEmphasis, // Fix incomplete emphasis (*italic*)
-  fixCode, // Fix incomplete code blocks
   // Skip other functions or add your own
 ])
 </script>
@@ -92,16 +88,16 @@ const preprocess = flow([
 
 The following functions are available for use in `preprocess`:
 
+- `fixCode`: Completes incomplete code block syntax (```code```)
 - `fixFootnote`: Removes incomplete footnote references (`[^label]`) that don't have corresponding definitions (`[^label]:`)
 - `fixStrong`: Completes incomplete strong syntax (`**bold**`). Also removes standalone list markers (`- `) left after removing incomplete `**` to prevent parsing issues
 - `fixEmphasis`: Completes incomplete emphasis syntax (`*italic*`). Also removes standalone list markers (`- `) left after removing incomplete `*` to prevent parsing issues
 - `fixDelete`: Completes incomplete strikethrough syntax (`~~deleted~~`)
 - `fixTaskList`: Removes incomplete task list syntax (`- [`) and standalone dashes (`-`) that could cause parsing issues. **Must run before `fixLink`** to prevent `- [` from being treated as an incomplete link
 - `fixLink`: Completes incomplete link syntax (`[text](url)`) and removes trailing standalone brackets (`[`) without content
-- `fixCode`: Completes incomplete code block syntax (```code```)
 - `fixTable`: Completes incomplete table syntax
-- `fixInlineMath`: Completes incomplete inline math syntax (`$math$`)
-- `remend`: Intelligently parses and completes incomplete Markdown syntax blocks (from [remend](https://github.com/vercel/streamdown/tree/main/packages/remend), a library from the [streamdown](https://streamdown.ai/) project). It automatically detects and completes unterminated syntax, providing the foundation for streaming-friendly Markdown parsing
+- `fixInlineMath`: Completes incomplete inline math syntax (`$$math$$`)
+- `fixMath`: Completes incomplete block math syntax (`$$\n...\n$$`)
 
 ::: danger ⚠️ Important: Execution Order
 The order of preprocess functions is **critical** to prevent parsing conflicts. The default order is:
@@ -109,26 +105,26 @@ The order of preprocess functions is **critical** to prevent parsing conflicts. 
 
 ```typescript
 flow([
+  fixCode,
   fixFootnote,
   fixStrong,
   fixEmphasis,
   fixDelete,
   fixTaskList, // Must run before fixLink
   fixLink,
-  fixCode,
   fixTable,
   fixInlineMath,
-  remend,
+  fixMath,
 ])
 ```
 
 **Key ordering rules:**
 
+- **`fixCode` runs first**: Code blocks should be handled early to prevent code syntax from interfering with other syntax completion.
+
 - **`fixTaskList` must run before `fixLink`**: This prevents incomplete task list syntax like `- [` from being misinterpreted as an incomplete link marker. If `fixLink` runs first, it will remove the `[`, leaving `- ` which could be parsed as a setext heading underline.
 
 - **`fixStrong` and `fixEmphasis` should run early**: These functions clean up not only `**` and `*`, but also any standalone list markers (`- `) left behind, preventing them from causing parsing issues in later stages.
-
-- **`remend` should run last**: It acts as a final catch-all for any remaining incomplete syntax.
 
 If you customize the preprocess pipeline, ensure you maintain these ordering rules to avoid parsing conflicts.
 
@@ -309,39 +305,5 @@ const mdastOptions = {
 
 <template>
   <Markdown :content="content" :mdast-options="mdastOptions" />
-</template>
-```
-
-## extendMarkdownIt
-
-- **Type:** `(md: MarkdownItAsync) => void`
-
-Function to extend the markdown-it instance with custom plugins or configurations.
-
-**Note:** The `MarkdownItAsync` type comes from [`markdown-it-async`](https://github.com/antfu/markdown-it-async), which enhances `markdown-it` to support async highlight functions. `markdown-it` is only used as a **fallback** rendering mechanism for AST nodes that don't have dedicated node renderers. In most cases, you **don't need to configure this** as the library provides renderers for common node types. Only configure this if you need to add custom markdown-it plugins for handling unsupported node types.
-
-### Example
-
-```vue
-<script setup lang="ts">
-import type { MarkdownItAsync } from 'markdown-it-async'
-import markdownItFootnote from 'markdown-it-footnote'
-import { Markdown } from 'vue-stream-markdown'
-
-function extendMarkdownIt(md: MarkdownItAsync) {
-  // Add plugins
-  md.use(markdownItFootnote)
-
-  // Configure options
-  md.set({
-    html: true,
-    linkify: true,
-    typographer: true,
-  })
-}
-</script>
-
-<template>
-  <Markdown :content="content" :extend-markdown-it="extendMarkdownIt" />
 </template>
 ```

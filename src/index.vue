@@ -38,14 +38,7 @@ const containerRef = ref<HTMLDivElement>()
 
 const { provideContext } = useContext()
 
-const markdownParser = new MarkdownParser({
-  mode: props.mode,
-  mdastOptions: props.mdastOptions,
-  normalize: props.normalize,
-  preprocess: props.preprocess,
-  postprocess: props.postprocess,
-  extendMarkdownIt: props.extendMarkdownIt,
-})
+const markdownParser = new MarkdownParser(props)
 
 const processed = computed(() => markdownParser.parseMarkdown(props.content))
 

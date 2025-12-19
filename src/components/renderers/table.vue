@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Control, ParsedNode, SelectOption, TableNodeRendererProps } from '../../types'
+import type { Control, ParsedNode, SelectOption, TableCellNode, TableNodeRendererProps, TableRowNode } from '../../types'
 import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useContext, useControls, useI18n } from '../../composables'
@@ -106,6 +106,9 @@ const controls = computed(
 )
 
 function getNodes(cell: unknown) {
+  const children = (cell as TableRowNode | TableCellNode).children
+  if (children)
+    return children
   return [cell] as ParsedNode[]
 }
 </script>

@@ -1,4 +1,4 @@
-import { incompleteBracketPattern, incompleteLinkTextPattern, incompleteUrlPattern } from './pattern'
+import { codeBlockPattern, incompleteBracketPattern, incompleteLinkTextPattern, incompleteUrlPattern, tripleBacktickPattern } from './pattern'
 import { findLastNonEmptyLineIndex, getLastParagraphWithIndex } from './utils'
 
 /**
@@ -44,9 +44,19 @@ import { findLastNonEmptyLineIndex, getLastParagraphWithIndex } from './utils'
  * // Removes trailing standalone bracket and trailing newline
  */
 export function fixLink(content: string): string {
+  // Don't process if we're inside a code block (unclosed)
+  const codeBlockMatches = content.match(tripleBacktickPattern)
+  const codeBlockCount = codeBlockMatches ? codeBlockMatches.length : 0
+  if (codeBlockCount % 2 === 1) {
+    return content
+  }
+
   // Find the last paragraph (after the last blank line)
   const lines = content.split('\n')
   const { lastParagraph } = getLastParagraphWithIndex(content)
+
+  // Remove code blocks from the last paragraph to avoid processing links inside them
+  const lastParagraphWithoutCodeBlocks = lastParagraph.replace(codeBlockPattern, '')
 
   // Check the last non-empty line for trailing standalone bracket
   // This handles cases where content ends with [\n or [ with trailing whitespace
@@ -101,20 +111,21 @@ export function fixLink(content: string): string {
 
   // Check for unclosed link/image syntax at the end
   // Using multiple specific patterns to avoid backtracking issues
+  // Use lastParagraphWithoutCodeBlocks to avoid matching inside code blocks
 
   // Pattern 1: [text or ![text - incomplete bracket (no closing ])
-  if (incompleteBracketPattern.test(lastParagraph)) {
+  if (incompleteBracketPattern.test(lastParagraphWithoutCodeBlocks)) {
     return `${content}]()`
   }
 
   // Pattern 2: [text] or ![text] - missing URL part (has ] but no opening ())
-  if (incompleteLinkTextPattern.test(lastParagraph)) {
+  if (incompleteLinkTextPattern.test(lastParagraphWithoutCodeBlocks)) {
     return `${content}()`
   }
 
   // Pattern 3: [text]( or [text](url or ![text]( or ![text](url - incomplete URL (has ]( but no closing ))
   // Match link/image that has ]( but no closing )
-  if (incompleteUrlPattern.test(lastParagraph))
+  if (incompleteUrlPattern.test(lastParagraphWithoutCodeBlocks))
     return `${content})`
 
   return content

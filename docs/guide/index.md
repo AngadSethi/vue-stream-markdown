@@ -13,7 +13,7 @@ When you stream Markdown content from AI models, new challenges emerge that trad
 
 ## How Streamdown Solves It
 
-[Streamdown](https://streamdown.ai/) has spawned [`remend`](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md), a library that handles most of the completion work in streaming output, including:
+This project implements syntax completion functionality internally, inspired by [`remend`](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md) from [streamdown](https://streamdown.ai/). The internal implementation handles:
 
 - **Parsing incomplete blocks** - Automatically detects and completes unterminated Markdown syntax
 - **Progressive formatting** - Applies styling to partial content as it streams in
@@ -42,4 +42,4 @@ While this project is inspired by streamdown, it's not just a Vue version. It im
 
 ## Acknowledgments
 
-This project is deeply inspired by [streamdown](https://streamdown.ai/). Special thanks to the streamdown team for their innovative approach to streaming Markdown rendering, which laid the foundation for this work.
+This project is inspired by [streamdown](https://streamdown.ai/) and the [remend](https://github.com/vercel/streamdown/blob/main/packages/remend/README.md) library for their foundational ideas on streaming Markdown parsing.

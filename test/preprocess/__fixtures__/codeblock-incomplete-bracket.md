@@ -1,0 +1,1 @@
+```python\ndef fibonacci(n: int) -> list[

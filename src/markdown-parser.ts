@@ -1,5 +1,4 @@
 import type { MarkdownParserOptions, ParsedNode, SyntaxTree } from './types'
-import { MarkdownItAsync } from 'markdown-it-async'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { frontmatterFromMarkdown, frontmatterToMarkdown } from 'mdast-util-frontmatter'
 import { gfmFromMarkdown, gfmToMarkdown } from 'mdast-util-gfm'
@@ -20,7 +19,6 @@ export interface Options extends MarkdownParserOptions {
 
 export class MarkdownParser {
   private mode: Options['mode'] = 'streaming'
-  private md: MarkdownItAsync
   private content: string = ''
   private syntaxTree: SyntaxTree | null = null
 
@@ -29,8 +27,6 @@ export class MarkdownParser {
   constructor(options: Options) {
     this.mode = options.mode
     this.options = options
-    this.md = new MarkdownItAsync()
-    this.options.extendMarkdownIt?.(this.md)
   }
 
   private update(data: string) {
@@ -58,10 +54,6 @@ export class MarkdownParser {
       content: this.content,
       nodes: this.syntaxTree.children,
     }
-  }
-
-  markdownToHtml(content: string): string {
-    return this.md.render(content)
   }
 
   markdownToAst(content: string, loading: boolean = false): SyntaxTree {

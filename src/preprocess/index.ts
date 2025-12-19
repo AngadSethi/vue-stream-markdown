@@ -1,4 +1,3 @@
-import remend from 'remend'
 import { flow } from '../utils'
 import { fixCode } from './code'
 import { fixDelete } from './delete'
@@ -6,6 +5,7 @@ import { fixEmphasis } from './emphasis'
 import { fixFootnote } from './footnote'
 import { fixInlineMath } from './inline-math'
 import { fixLink } from './link'
+import { fixMath } from './math'
 import { crlfPattern } from './pattern'
 import { fixStrong } from './strong'
 import { fixTable } from './table'
@@ -25,21 +25,19 @@ export function normalize(content: string): string {
   ])(content)
 }
 
-export function preprocess(content: string, streamdown: boolean = true): string {
+export function preprocess(content: string): string {
   const tasks: ((content: string) => string)[] = [
+    fixCode,
     fixFootnote,
     fixStrong,
     fixEmphasis,
     fixDelete,
-    fixCode,
     fixTaskList,
     fixLink,
     fixTable,
     fixInlineMath,
+    fixMath,
   ]
-
-  if (streamdown)
-    tasks.push(remend)
 
   return flow(tasks)(content)
 }
@@ -50,10 +48,10 @@ export {
   fixEmphasis,
   fixFootnote,
   fixLink,
+  fixMath,
   fixStrong,
   fixTable,
   fixTaskList,
   preprocessLaTeX,
   proprocessContent,
-  remend,
 }

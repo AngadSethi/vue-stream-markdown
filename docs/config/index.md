@@ -4,7 +4,7 @@
 
 StreamMarkdown provides comprehensive configuration options to customize the markdown rendering experience.
 
-- [Parser](/config/parser) - Configure markdown parsing options including preprocessing, postprocessing, and markdown-it extensions.
+- [Parser](/config/parser) - Configure markdown parsing options including preprocessing and postprocessing.
 - [Display Options](/config/display-options) - Configure display settings for code blocks and images.
 - [Controls](/config/controls) - Configure interactive controls for tables, code blocks, images, and mermaid diagrams.
 - [Previewers](/config/previewers) - Configure preview components for any programming language in code blocks.
@@ -112,12 +112,6 @@ Function to normalize the syntax tree after parsing but before postprocess. Used
 - **Type:** `(content: SyntaxTree) => SyntaxTree`
 
 Function to postprocess the syntax tree after postNormalize. In streaming mode, this is always applied; in static mode, it is skipped.
-
-### extendMarkdownIt
-
-- **Type:** `(md: MarkdownItAsync) => void`
-
-Function to extend the markdown-it instance with custom plugins or configurations.
 
 ### controls
 

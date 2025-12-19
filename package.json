@@ -19,8 +19,8 @@
     "markdown",
     "stream",
     "mermaid",
-    "latex",
     "katex",
+    "latex",
     "customizable"
   ],
   "exports": {
@@ -70,9 +70,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "catalog:frontend",
-    "@vueuse/core": "catalog:utils",
-    "markdown-it-async": "catalog:markdown",
-    "remend": "catalog:markdown"
+    "@vueuse/core": "catalog:utils"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:lint",

@@ -651,6 +651,81 @@ export const inlineMathTestCases: TestCasesByCategory = {
   ],
 }
 
+export const mathTestCases: TestCasesByCategory = {
+  math: [
+    {
+      description: 'should complete unclosed block math',
+      input: '$$\nE = mc^2',
+      expected: '$$\nE = mc^2\n$$',
+    },
+    {
+      description: 'should complete block math with multiple lines',
+      input: '$$\nE = mc^2\nx = 1',
+      expected: '$$\nE = mc^2\nx = 1\n$$',
+    },
+    {
+      description: 'should not modify closed block math',
+      input: '$$\nE = mc^2\n$$',
+      expected: '$$\nE = mc^2\n$$',
+    },
+    {
+      description: 'should complete block math spanning multiple paragraphs',
+      input: '$$\nE = mc^2\n\nx = 1',
+      expected: '$$\nE = mc^2\n\nx = 1\n$$',
+    },
+    {
+      description: 'should remove bare $$ on separate line',
+      input: '$$\n',
+      expected: '',
+    },
+    {
+      description: 'should remove bare $$ without newline',
+      input: '$$',
+      expected: '',
+    },
+    {
+      description: 'should complete block math without trailing newline',
+      input: '$$\nE = mc^2',
+      expected: '$$\nE = mc^2\n$$',
+    },
+    {
+      description: 'should complete block math with trailing newline',
+      input: '$$\nE = mc^2\n',
+      expected: '$$\nE = mc^2\n$$',
+    },
+    {
+      description: 'should ignore $$ in code blocks',
+      input: '```\n$$\nE = mc^2\n```',
+      expected: '```\n$$\nE = mc^2\n```',
+    },
+    {
+      description: 'should ignore $$ in inline code',
+      input: 'Text `$$` and more',
+      expected: 'Text `$$` and more',
+    },
+    {
+      description: 'should handle multiple block math blocks',
+      input: '$$\nE = mc^2\n$$\n\n$$\nx = 1',
+      expected: '$$\nE = mc^2\n$$\n\n$$\nx = 1\n$$',
+    },
+    {
+      description: 'should not process inline math ($$ on same line)',
+      input: 'The formula is $$x = 1$$',
+      expected: 'The formula is $$x = 1$$',
+    },
+    {
+      description: 'should handle block math with whitespace',
+      input: '  $$\n  E = mc^2',
+      expected: '  $$\n  E = mc^2\n$$',
+    },
+    {
+      description: 'should complete block math after other content',
+      input: 'Some text\n\n$$\nE = mc^2',
+      expected: 'Some text\n\n$$\nE = mc^2\n$$',
+    },
+  ],
+}
+
 export const tableTestCases: TestCasesByCategory = {
   table: [
     {
@@ -883,6 +958,7 @@ export const testCasesByCategory: TestCasesByCategory = {
   ...strongTestCases,
   ...linkTestCases,
   ...inlineMathTestCases,
+  ...mathTestCases,
   ...tableTestCases,
   ...taskListTestCases,
   ...footnoteTestCases,
