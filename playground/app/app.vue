@@ -31,6 +31,9 @@ const typedEnable = ref<boolean>(false)
 const typedStep = computed(() => userConfig.value.typedStep)
 const typedDelay = computed(() => userConfig.value.typedDelay)
 
+const pauseAutoScroll = ref<boolean>(false)
+const lastScrollTop = ref<number>(0)
+
 const {
   typedContent,
   typingIndex,
@@ -159,8 +162,23 @@ function normalizeContent(content: string) {
   return removeUnclosedGithubTag(_content)
 }
 
+function onScroll() {
+  const element = containerRef.value
+  if (!element)
+    return
+
+  const isScrollUp = element.scrollTop < lastScrollTop.value
+  lastScrollTop.value = element.scrollTop
+
+  const distanceFromBottom = element.scrollHeight - element.scrollTop - element.clientHeight
+  if (isScrollUp && distanceFromBottom > 65)
+    pauseAutoScroll.value = true
+  else if (distanceFromBottom <= 20)
+    pauseAutoScroll.value = false
+}
+
 const scrollToBottom = throttle(800, () => {
-  if (!userConfig.value.autoScroll)
+  if (!userConfig.value.autoScroll || pauseAutoScroll.value)
     return
 
   const container = containerRef.value
@@ -172,6 +190,12 @@ const scrollToBottom = throttle(800, () => {
     behavior: 'smooth',
   })
 })
+
+function resetScrollState() {
+  userConfig.value.autoScroll = false
+  pauseAutoScroll.value = false
+  lastScrollTop.value = 0
+}
 
 // const { generateCSS } = useTailwindV3Theme({
 //   styleScope: 'body',
@@ -186,7 +210,7 @@ const scrollToBottom = throttle(800, () => {
 watch(() => isTyping.value, () => {
   typedEnable.value = isTyping.value
   if (!isTyping.value)
-    userConfig.value.autoScroll = false
+    resetScrollState()
 })
 watch(() => mode.value, terminateTypeWriting)
 watch(() => locale.value, () => userConfig.value.locale = locale.value)
@@ -252,7 +276,7 @@ onMounted(() => {
         <CopyButton :content="copyContent" />
       </ScrollTriggerGroup>
 
-      <div ref="containerRef" class="scrollbar-gutter-stable pr-4 h-full overflow-auto">
+      <div ref="containerRef" class="scrollbar-gutter-stable pr-4 h-full overflow-auto" @scroll="onScroll">
         <Markdown
           ref="markdownRef"
           class="flex flex-col gap-3"
