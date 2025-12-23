@@ -1,4 +1,4 @@
-import { codeBlockPattern, doubleDollarPattern } from './pattern'
+import { codeBlockPattern, doubleAsteriskPattern, doubleDollarPattern, doubleTildePattern, doubleUnderscorePattern, singleAsteriskPattern, singleUnderscorePattern } from './pattern'
 import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock } from './utils'
 
 /**
@@ -85,6 +85,22 @@ export function fixInlineMath(content: string): string {
     const hasContentAfter = afterLast.trim().length > 0
 
     if (hasContentAfter) {
+      // Check if the math content contains unclosed markdown syntax
+      // If so, don't complete the math block to avoid interfering with markdown syntax
+      const mathContent = afterLast.trim()
+      const hasUnclosedStrong = (mathContent.match(doubleAsteriskPattern)?.length ?? 0) % 2 === 1
+        || (mathContent.match(doubleUnderscorePattern)?.length ?? 0) % 2 === 1
+      const hasUnclosedDelete = (mathContent.match(doubleTildePattern)?.length ?? 0) % 2 === 1
+      // Check for single * or _ (emphasis syntax)
+      const withoutDoubleAsterisk = mathContent.replace(doubleAsteriskPattern, '')
+      const withoutDoubleUnderscore = mathContent.replace(doubleUnderscorePattern, '')
+      const hasUnclosedEmphasis = (withoutDoubleAsterisk.match(singleAsteriskPattern)?.length ?? 0) % 2 === 1
+        || (withoutDoubleUnderscore.match(singleUnderscorePattern)?.length ?? 0) % 2 === 1
+      if (hasUnclosedStrong || hasUnclosedDelete || hasUnclosedEmphasis) {
+        // Don't complete math if content contains unclosed markdown syntax
+        return content
+      }
+
       // Complete inline math
       if (shouldRemoveTrailingDollar) {
         const offset = calculateParagraphOffset(paragraphStartIndex, lines)

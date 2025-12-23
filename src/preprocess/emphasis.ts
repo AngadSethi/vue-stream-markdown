@@ -1,5 +1,5 @@
 import { codeBlockPattern, doubleAsteriskPattern, doubleUnderscorePattern, singleAsteriskPattern, singleUnderscorePattern, trailingStandaloneDashWithNewlinesPattern } from './pattern'
-import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock } from './utils'
+import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock, isWithinLinkOrImageUrl, isWithinMathBlock } from './utils'
 
 /**
  * Fix unclosed emphasis (* or _) syntax in streaming markdown
@@ -41,6 +41,16 @@ export function fixEmphasis(content: string): string {
   // Check asterisk
   if (asteriskCount % 2 === 1) {
     const lastStarPos = withoutDoubleAsterisk.lastIndexOf('*')
+    // Calculate absolute position in content
+    const paragraphOffset = calculateParagraphOffset(paragraphStartIndex, lines)
+    const absoluteLastStarPos = paragraphOffset + lastStarPos
+
+    // Check if the asterisk is in math block or link/image URL
+    if (isWithinMathBlock(content, absoluteLastStarPos) || isWithinLinkOrImageUrl(content, absoluteLastStarPos)) {
+      // Don't process if inside math block or link/image URL
+      return content
+    }
+
     const afterLast = withoutDoubleAsterisk.substring(lastStarPos + 1).trim()
 
     if (afterLast.length > 0) {
@@ -54,6 +64,16 @@ export function fixEmphasis(content: string): string {
   // Check underscore
   if (underscoreCount % 2 === 1) {
     const lastUnderscorePos = withoutDoubleUnderscore.lastIndexOf('_')
+    // Calculate absolute position in content
+    const paragraphOffset = calculateParagraphOffset(paragraphStartIndex, lines)
+    const absoluteLastUnderscorePos = paragraphOffset + lastUnderscorePos
+
+    // Check if the underscore is in math block or link/image URL
+    if (isWithinMathBlock(content, absoluteLastUnderscorePos) || isWithinLinkOrImageUrl(content, absoluteLastUnderscorePos)) {
+      // Don't process if inside math block or link/image URL
+      return content
+    }
+
     const afterLast = withoutDoubleUnderscore.substring(lastUnderscorePos + 1).trim()
 
     if (afterLast.length > 0) {

@@ -1,5 +1,5 @@
 import { codeBlockPattern, doubleTildePattern } from './pattern'
-import { getLastParagraphWithIndex, isInsideUnclosedCodeBlock } from './utils'
+import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock, isWithinLinkOrImageUrl, isWithinMathBlock } from './utils'
 
 /**
  * Fix unclosed strikethrough (~~) syntax in streaming markdown
@@ -73,8 +73,40 @@ export function fixDelete(content: string): string {
   // 1. Odd number of ~~ (unclosed)
   // 2. There's actual content after the last ~~ (not just `~~` alone)
   if (count % 2 === 1) {
-    const lastTildePos = lastParagraphWithoutCodeBlocks.lastIndexOf('~~')
-    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastTildePos + 2)
+    // Find the last ~~ in original lastParagraph, skipping code blocks
+    const lines = content.split('\n')
+    let actualLastTildePos = -1
+    let inCodeBlock = false
+    for (let i = 0; i < lastParagraph.length - 1; i++) {
+      // Check for code block fences
+      if (lastParagraph.substring(i, i + 3) === '```') {
+        inCodeBlock = !inCodeBlock
+        i += 2 // Skip the next two backticks
+        continue
+      }
+      // Skip if inside code block
+      if (inCodeBlock) {
+        continue
+      }
+      // Check for ~~
+      if (lastParagraph.substring(i, i + 2) === '~~') {
+        actualLastTildePos = i
+        i += 1 // Skip the second ~
+      }
+    }
+    if (actualLastTildePos === -1) {
+      return content
+    }
+    const paragraphOffset = calculateParagraphOffset(paragraphStartIndex, lines)
+    const absoluteLastTildePos = paragraphOffset + actualLastTildePos
+
+    // Check if the tilde is in math block or link/image URL
+    if (isWithinMathBlock(content, absoluteLastTildePos) || isWithinLinkOrImageUrl(content, absoluteLastTildePos)) {
+      // Don't process if inside math block or link/image URL
+      return content
+    }
+
+    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastParagraphWithoutCodeBlocks.lastIndexOf('~~') + 2)
     const afterLastTrimmed = afterLast.trim()
 
     // If there's content after ~~, complete it

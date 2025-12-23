@@ -233,9 +233,23 @@ export function isWithinLinkOrImageUrl(
     if (text[i] === '(') {
       // Check if there's a ] immediately before the (
       if (i > 0 && text[i - 1] === ']') {
-        // We're potentially inside a link/image URL
-        // Check if we're before the closing )
-        return isBeforeClosingParen(text, position)
+        // We're inside a link/image URL
+        // If there's a closing ) on the same line after position, we're before it
+        // If there's no closing ), we're still in the URL (unclosed)
+        const hasClosingParen = isBeforeClosingParen(text, position)
+        // If we found ]( and haven't found ), we're in an unclosed URL
+        // Check if there's a ) after position on the same line
+        if (!hasClosingParen) {
+          // Check if we're on the same line (no newline between ( and position)
+          for (let j = i + 1; j < position; j += 1) {
+            if (text[j] === '\n') {
+              return false
+            }
+          }
+          // No newline found, we're in an unclosed URL
+          return true
+        }
+        return true
       }
       return false
     }

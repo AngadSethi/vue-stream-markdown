@@ -1,5 +1,5 @@
 import { codeBlockPattern, doubleAsteriskPattern, doubleUnderscorePattern, singleAsteriskPattern, singleUnderscorePattern, trailingStandaloneDashWithNewlinesPattern } from './pattern'
-import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock } from './utils'
+import { calculateParagraphOffset, getLastParagraphWithIndex, isInsideUnclosedCodeBlock, isWithinLinkOrImageUrl, isWithinMathBlock } from './utils'
 
 /**
  * Fix unclosed strong (** or __) syntax in streaming markdown
@@ -38,7 +38,8 @@ export function fixStrong(content: string): string {
   }
 
   // Find the last paragraph (after the last blank line)
-  const { lastParagraph } = getLastParagraphWithIndex(content)
+  const lines = content.split('\n')
+  const { lastParagraph, startIndex: paragraphStartIndex } = getLastParagraphWithIndex(content)
 
   // Remove code blocks from the last paragraph to avoid processing strong inside them
   const lastParagraphWithoutCodeBlocks = lastParagraph.replace(codeBlockPattern, '')
@@ -63,8 +64,39 @@ export function fixStrong(content: string): string {
 
   // Check asterisk
   if (asteriskCount % 2 === 1) {
-    const lastStarPos = lastParagraphWithoutCodeBlocks.lastIndexOf('**')
-    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastStarPos + 2).trim()
+    // Find the last ** in original lastParagraph, skipping code blocks
+    let actualLastStarPos = -1
+    let inCodeBlock = false
+    for (let i = 0; i < lastParagraph.length - 1; i++) {
+      // Check for code block fences
+      if (lastParagraph.substring(i, i + 3) === '```') {
+        inCodeBlock = !inCodeBlock
+        i += 2 // Skip the next two backticks
+        continue
+      }
+      // Skip if inside code block
+      if (inCodeBlock) {
+        continue
+      }
+      // Check for **
+      if (lastParagraph.substring(i, i + 2) === '**') {
+        actualLastStarPos = i
+        i += 1 // Skip the second *
+      }
+    }
+    if (actualLastStarPos === -1) {
+      return content
+    }
+    const paragraphOffset = calculateParagraphOffset(paragraphStartIndex, lines)
+    const absoluteLastStarPos = paragraphOffset + actualLastStarPos
+
+    // Check if the asterisk is in math block or link/image URL
+    if (isWithinMathBlock(content, absoluteLastStarPos) || isWithinLinkOrImageUrl(content, absoluteLastStarPos)) {
+      // Don't process if inside math block or link/image URL
+      return content
+    }
+
+    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastParagraphWithoutCodeBlocks.lastIndexOf('**') + 2).trim()
 
     if (afterLast.length > 0) {
       needsAsteriskCompletion = true
@@ -76,8 +108,39 @@ export function fixStrong(content: string): string {
 
   // Check underscore
   if (underscoreCount % 2 === 1) {
-    const lastUnderscorePos = lastParagraphWithoutCodeBlocks.lastIndexOf('__')
-    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastUnderscorePos + 2).trim()
+    // Find the last __ in original lastParagraph, skipping code blocks
+    let actualLastUnderscorePos = -1
+    let inCodeBlock = false
+    for (let i = 0; i < lastParagraph.length - 1; i++) {
+      // Check for code block fences
+      if (lastParagraph.substring(i, i + 3) === '```') {
+        inCodeBlock = !inCodeBlock
+        i += 2 // Skip the next two backticks
+        continue
+      }
+      // Skip if inside code block
+      if (inCodeBlock) {
+        continue
+      }
+      // Check for __
+      if (lastParagraph.substring(i, i + 2) === '__') {
+        actualLastUnderscorePos = i
+        i += 1 // Skip the second _
+      }
+    }
+    if (actualLastUnderscorePos === -1) {
+      return content
+    }
+    const paragraphOffset = calculateParagraphOffset(paragraphStartIndex, lines)
+    const absoluteLastUnderscorePos = paragraphOffset + actualLastUnderscorePos
+
+    // Check if the underscore is in math block or link/image URL
+    if (isWithinMathBlock(content, absoluteLastUnderscorePos) || isWithinLinkOrImageUrl(content, absoluteLastUnderscorePos)) {
+      // Don't process if inside math block or link/image URL
+      return content
+    }
+
+    const afterLast = lastParagraphWithoutCodeBlocks.substring(lastParagraphWithoutCodeBlocks.lastIndexOf('__') + 2).trim()
 
     if (afterLast.length > 0) {
       needsUnderscoreCompletion = true

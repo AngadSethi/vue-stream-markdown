@@ -239,6 +239,21 @@ export const deleteTestCases: TestCasesByCategory = {
       input: '```\ncode\n```\n\nText ~~strike',
       expected: '```\ncode\n```\n\nText ~~strike~~',
     },
+    {
+      description: 'should ignore ~~ inside math block',
+      input: 'The formula is $$x = 1 + 2~~3',
+      expected: 'The formula is $$x = 1 + 2~~3',
+    },
+    {
+      description: 'should ignore ~~ inside link URL',
+      input: '[text](https://example.com/page~~',
+      expected: '[text](https://example.com/page~~',
+    },
+    {
+      description: 'should ignore ~~ inside image URL',
+      input: '![alt](https://example.com/image~~',
+      expected: '![alt](https://example.com/image~~',
+    },
   ],
 }
 
@@ -346,6 +361,36 @@ export const emphasisTestCases: TestCasesByCategory = {
       description: 'should process * outside code block',
       input: '```\ncode\n```\n\nText *italic',
       expected: '```\ncode\n```\n\nText *italic*',
+    },
+    {
+      description: 'should ignore * inside math block',
+      input: 'The formula is $$x = 1 + 2*3',
+      expected: 'The formula is $$x = 1 + 2*3',
+    },
+    {
+      description: 'should ignore _ inside math block',
+      input: 'The formula is $$x = 1 + 2_3',
+      expected: 'The formula is $$x = 1 + 2_3',
+    },
+    {
+      description: 'should ignore * inside link URL',
+      input: '[text](https://example.com/page*',
+      expected: '[text](https://example.com/page*',
+    },
+    {
+      description: 'should ignore _ inside link URL',
+      input: '[text](https://example.com/page_',
+      expected: '[text](https://example.com/page_',
+    },
+    {
+      description: 'should ignore * inside image URL',
+      input: '![alt](https://example.com/image*',
+      expected: '![alt](https://example.com/image*',
+    },
+    {
+      description: 'should ignore _ inside image URL',
+      input: '![alt](https://example.com/image_',
+      expected: '![alt](https://example.com/image_',
     },
   ],
 }
@@ -474,6 +519,36 @@ export const strongTestCases: TestCasesByCategory = {
       description: 'should process ** outside code block',
       input: '```\ncode\n```\n\nText **bold',
       expected: '```\ncode\n```\n\nText **bold**',
+    },
+    {
+      description: 'should ignore ** inside math block',
+      input: 'The formula is $$x = 1 + 2**3',
+      expected: 'The formula is $$x = 1 + 2**3',
+    },
+    {
+      description: 'should ignore __ inside math block',
+      input: 'The formula is $$x = 1 + 2__3',
+      expected: 'The formula is $$x = 1 + 2__3',
+    },
+    {
+      description: 'should ignore ** inside link URL',
+      input: '[text](https://example.com/page**',
+      expected: '[text](https://example.com/page**',
+    },
+    {
+      description: 'should ignore __ inside link URL',
+      input: '[text](https://example.com/page__',
+      expected: '[text](https://example.com/page__',
+    },
+    {
+      description: 'should ignore ** inside image URL',
+      input: '![alt](https://example.com/image**',
+      expected: '![alt](https://example.com/image**',
+    },
+    {
+      description: 'should ignore __ inside image URL',
+      input: '![alt](https://example.com/image__',
+      expected: '![alt](https://example.com/image__',
     },
   ],
 }
