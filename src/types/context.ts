@@ -205,6 +205,10 @@ export interface UIOptions {
   hideTooltip?: boolean
 }
 
+export interface PreprocessContext {
+  singleDollarTextMath?: boolean
+}
+
 export {
   type FromMarkdownExtension,
   type MicromarkExtension,
