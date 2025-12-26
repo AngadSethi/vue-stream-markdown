@@ -4,12 +4,12 @@ import { computed, onMounted, ref, unref, watch } from 'vue'
 import { OVERLAY_CONTAINER_ID } from '../constants'
 import { getOverlayContainer } from '../utils'
 
-export function useDarkDetector(darkMode: MaybeRef<boolean | undefined>) {
+export function useDarkDetector(darkProp: MaybeRef<boolean | undefined>) {
   const target = ref<HTMLElement | null>()
 
-  const isDarkProvided = computed(() => typeof unref(darkMode) === 'boolean')
+  const isDarkProvided = computed(() => typeof unref(darkProp) === 'boolean')
   const detectedDark = ref<boolean>(false)
-  const isDark = computed(() => isDarkProvided.value ? unref(darkMode)! : detectedDark.value)
+  const isDark = computed(() => isDarkProvided.value ? unref(darkProp)! : detectedDark.value)
 
   function detect() {
     detectedDark.value = document.documentElement.classList.contains('dark')

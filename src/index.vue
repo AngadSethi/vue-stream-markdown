@@ -3,7 +3,7 @@ import type { BuiltinNodeRenderers, Icons, NodeRenderers, StreamMarkdownProps } 
 import { computed, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 import NodeList from './components/node-list.vue'
 import { NODE_RENDERERS } from './components/renderers'
-import { useContext, useDarkDetector, useKatex, useMermaid, useShiki } from './composables'
+import { useContext, useDarkDetector, useKatex, useLocaleDetector, useMermaid, useShiki } from './composables'
 import { ICONS, PRELOAD_NODE_RENDERER } from './constants'
 import { loadLocaleMessages } from './locales'
 import { MarkdownParser } from './markdown-parser'
@@ -18,7 +18,6 @@ const props = withDefaults(defineProps<StreamMarkdownProps>(), {
   previewers: true,
   isDark: undefined,
   enableAnimate: undefined,
-  locale: 'en-US',
 })
 
 const emits = defineEmits<{
@@ -27,8 +26,8 @@ const emits = defineEmits<{
 
 const {
   mode,
-  isDark: darkMode,
-  locale,
+  isDark: darkProp,
+  locale: localeProp,
   shikiOptions,
   mermaidOptions,
   uiOptions,
@@ -37,7 +36,8 @@ const {
 
 const { provideContext } = useContext()
 
-const { isDark, stop: stopDarkModeObserver } = useDarkDetector(darkMode)
+const { isDark, stop: stopDarkModeObserver } = useDarkDetector(darkProp)
+const { locale } = useLocaleDetector(localeProp)
 
 const { preload: preloadShiki, dispose: disposeShiki } = useShiki({
   shikiOptions,
@@ -86,7 +86,7 @@ async function bootstrap() {
   ]
 
   if (props.locale !== 'en-US')
-    tasks.push(loadLocaleMessages(props.locale))
+    tasks.push(loadLocaleMessages(locale.value))
 
   if (preloadNodeRenderers.value.length)
     tasks.push(preloadAsyncComponents(nodeRenderers.value, preloadNodeRenderers.value))
