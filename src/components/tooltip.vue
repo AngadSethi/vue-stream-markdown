@@ -2,6 +2,7 @@
 import type { Placement } from '@floating-ui/dom'
 import { toRefs } from 'vue'
 import { useContext, useFloating } from '../composables'
+import { getOverlayContainer } from '../utils'
 
 defineOptions({
   inheritAttrs: false,
@@ -20,7 +21,7 @@ const props = withDefaults(defineProps<{
 
 const { placement, delay, trigger } = toRefs(props)
 
-const { hideTooltip, getContainer } = useContext()
+const { hideTooltip } = useContext()
 
 const {
   referenceEl: _referenceEl,
@@ -40,7 +41,7 @@ const {
   placement,
   delay,
   trigger,
-  getContainer,
+  getContainer: () => getOverlayContainer(),
 })
 
 defineExpose({ show, hide })

@@ -16,7 +16,7 @@ interface UseFloatingOptions {
   trigger?: MaybeRef<'hover' | 'click'>
   placement?: MaybeRef<Placement>
   delay?: MaybeRef<number | [number, number]>
-  getContainer?: () => HTMLElement | undefined
+  getContainer?: () => Element | HTMLElement | undefined | null
 }
 
 export function useFloating(options: UseFloatingOptions) {
