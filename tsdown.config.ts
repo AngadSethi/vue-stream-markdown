@@ -6,6 +6,10 @@ export default defineConfig({
   entry: ['./src/index'],
   target: 'chrome89',
   platform: 'neutral',
+  css: {
+    splitting: false,
+    fileName: 'index.css',
+  },
   inputOptions: {
     resolve: {
       mainFields: ['module', 'main'],
@@ -20,7 +24,7 @@ export default defineConfig({
   ],
   copy: [
     {
-      from: ['./src/index.css', './src/theme.css'],
+      from: ['./src/theme.css'],
       to: './dist',
     },
   ],

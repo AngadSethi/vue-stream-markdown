@@ -30,3 +30,10 @@ const Error = computed(() => katexOptions.value?.errorComponent ?? ErrorComponen
   />
   <div v-else data-stream-markdown="math" v-html="html" />
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='math'] {
+  text-align: center;
+  margin-block: 1rem;
+}
+</style>

@@ -7,3 +7,10 @@ withDefaults(defineProps<TextNodeRendererProps>(), {})
 <template>
   <span data-stream-markdown="text">{{ node.value }}</span>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='text'] {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+</style>

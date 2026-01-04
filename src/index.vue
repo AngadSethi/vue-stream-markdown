@@ -8,6 +8,7 @@ import { ICONS, PRELOAD_NODE_RENDERER } from './constants'
 import { loadLocaleMessages } from './locales'
 import { MarkdownParser } from './markdown-parser'
 import { preloadAsyncComponents } from './utils'
+import './style.css'
 
 const props = withDefaults(defineProps<StreamMarkdownProps>(), {
   mode: 'streaming',

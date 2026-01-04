@@ -73,3 +73,20 @@ defineExpose({ show, hide })
     </div>
   </Teleport>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='tooltip'] {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  z-index: 110;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='tooltip-overlay'] {
+  padding-block: 0.25rem;
+  padding-inline: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+</style>

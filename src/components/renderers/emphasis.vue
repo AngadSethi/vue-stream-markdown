@@ -10,3 +10,9 @@ const props = withDefaults(defineProps<EmphasisNodeRendererProps>(), {})
     <NodeList v-bind="props" :nodes="node.children" />
   </em>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='emphasis'] {
+  font-style: italic;
+}
+</style>

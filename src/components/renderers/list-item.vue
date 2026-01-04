@@ -24,3 +24,23 @@ const checked = computed(() => !!props.node.checked)
     <NodeList v-else v-bind="props" :nodes="node.children" />
   </li>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='list-item'] {
+  padding-block: 0.25rem;
+  padding-left: 0.25rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='list-item'] p {
+  margin: 0;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='task-list-item'] p {
+  display: inline-block;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='task-list-item-checkbox'] {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+</style>

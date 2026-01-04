@@ -15,3 +15,46 @@ const id = computed(() => `heading-${depth.value}`)
     <NodeList v-bind="props" :nodes="node.children" />
   </component>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-1'],
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-2'],
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-3'],
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-4'],
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-5'],
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-6'] {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-1'] {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-2'] {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-3'] {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-4'] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-5'] {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='heading-6'] {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+</style>

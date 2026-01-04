@@ -28,3 +28,10 @@ function updateHeight() {
     />
   </div>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='html-previewer'] {
+  height: 100%;
+  width: 100%;
+}
+</style>

@@ -5,7 +5,7 @@ packages:
 catalogs:
   build:
     '@vitejs/plugin-vue': ^6.0.3
-    tsdown: ^0.18.2
+    tsdown: ^0.18.4
     unplugin-icons: ^22.5.0
     unplugin-lightningcss: ^0.4.4
     vite: ^7.3.0

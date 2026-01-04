@@ -10,3 +10,9 @@ const props = withDefaults(defineProps<StrongNodeRendererProps>(), {})
     <NodeList v-bind="props" :nodes="node.children" />
   </strong>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='strong'] {
+  font-weight: 600;
+}
+</style>

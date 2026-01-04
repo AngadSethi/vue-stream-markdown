@@ -41,3 +41,18 @@ const Error = computed(() => hardenOptions.value?.errorComponent ?? ErrorCompone
     <NodeList v-bind="props" :nodes="node.children" />
   </component>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='link'] {
+  color: var(--primary);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='link'][data-stream-markdown-loading='true'] {
+  position: relative;
+  cursor: default;
+  text-decoration: none;
+  pointer-events: none;
+}
+</style>

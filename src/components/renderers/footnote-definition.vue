@@ -42,3 +42,29 @@ function scrollToReference() {
     />
   </a>
 </template>
+
+<style>
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='footnote-definition'] {
+  color: var(--muted-foreground);
+}
+
+:is(.stream-markdown, .stream-markdown-overlay)
+  [data-stream-markdown='footnote-definition']
+  [data-stream-markdown='footnote-definition-label'] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.25rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay)
+  [data-stream-markdown='footnote-definition']
+  [data-stream-markdown='footnote-definition-button'] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
+:is(.stream-markdown, .stream-markdown-overlay) [data-stream-markdown='footnote-definition'] p {
+  display: inline;
+}
+</style>
