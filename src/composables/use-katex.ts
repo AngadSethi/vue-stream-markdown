@@ -1,17 +1,35 @@
 import type { KatexOptions } from 'katex'
+import type { CdnOptions } from '../types'
 import { ref } from 'vue'
-import { hasKatex, isClient } from '../utils'
+import { hasKatexModule, isClient } from '../utils'
+import { useCdnLoader } from './use-cdn-loader'
+
+interface UseKatexOptions {
+  cdnOptions?: CdnOptions
+}
 
 let existingKatex: boolean = false
 
-export function useKatex() {
+export function useKatex(options: UseKatexOptions) {
+  const { cdnOptions } = options ?? {}
+
+  const { getCdnKatexUrl, loadCdnKatex, loadCdnKatexCss } = useCdnLoader({ cdnOptions })
+
   const installed = ref<boolean>(false)
+
+  async function getKatex(): Promise<typeof import('katex')> {
+    return await loadCdnKatex() ?? await import('katex')
+  }
+
+  async function hasKatex(): Promise<boolean> {
+    return getCdnKatexUrl() ? true : await hasKatexModule()
+  }
 
   async function render(code: string, options: KatexOptions = {}): Promise<{
     html?: string
     error?: string
   }> {
-    const { renderToString } = await import('katex')
+    const { renderToString } = await getKatex()
     try {
       const html = renderToString(code, {
         output: 'html',
@@ -30,8 +48,9 @@ export function useKatex() {
       return
 
     if (await hasKatex()) {
-      // Because katex.min.css is not included in the bundle, you need to import it manually.
-      // await import('katex/dist/katex.min.css')
+      // Because `katex.min.css` is not included in the bundle, you need to import it manually when not using CDN.
+      // If using CDN, the CSS file will be automatically loaded.
+      loadCdnKatexCss()
     }
   }
 

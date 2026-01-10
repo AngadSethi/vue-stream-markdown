@@ -9,14 +9,18 @@ export default defineComponent({
       type: Object as PropType<TokensResult>,
       required: false,
     },
+    getShiki: {
+      type: Function as PropType<() => Promise<typeof import('shiki')>>,
+      required: true,
+    },
   },
   setup(props) {
     if (!props.tokens)
       return null
 
-    const getTokenStyleObjectRef = shallowRef<typeof getTokenStyleObject | null>(null)
-    ;(async () => {
-      const { getTokenStyleObject } = await import('shiki')
+    const getTokenStyleObjectRef = shallowRef<typeof getTokenStyleObject | null>(null);
+    (async () => {
+      const { getTokenStyleObject } = await props.getShiki()
       getTokenStyleObjectRef.value = getTokenStyleObject
     })()
 

@@ -23,6 +23,8 @@ pnpm add mermaid
 pnpm add katex
 ```
 
+> **Note:** If you enable CDN configuration, you don't need to install locally as they will be loaded from CDN.
+
 ## Basic Usage
 
 By default, the component runs in `streaming` mode, which is optimized for progressive content updates. You can also use `static` mode for complete markdown content:
@@ -31,6 +33,7 @@ By default, the component runs in `streaming` mode, which is optimized for progr
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+// If CDN is enabled, you don't need to manually import katex.min.css
 import 'katex/dist/katex.min.css'
 import 'vue-stream-markdown/index.css'
 // If you don't have shadcn CSS variables globally, import the theme
@@ -55,6 +58,7 @@ This component library supports server-side rendering. When using with Nuxt.js, 
 ```ts
 export default defineNuxtConfig({
   css: [
+    // If CDN is enabled, you can omit katex.min.css
     'katex/dist/katex.min.css',
     'vue-stream-markdown/index.css',
     // If you don't have shadcn CSS variables globally, import the theme
@@ -86,6 +90,10 @@ export default defineNuxtConfig({
 ### LaTeX Math
 
 - `katexOptions` (KatexOptions): Configuration for KaTeX math rendering
+
+### CDN Configuration
+
+- `cdnOptions` (CdnOptions): Configure CDN loading for external libraries (Shiki, Mermaid, KaTeX) to reduce bundle size. See [External Options](/config/external-options#cdn-configuration) for detailed documentation.
 
 ### Controls
 

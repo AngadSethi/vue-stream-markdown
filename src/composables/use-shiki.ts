@@ -6,14 +6,16 @@ import type {
   TokensResult,
 } from 'shiki'
 import type { MaybeRef } from 'vue'
-import type { ShikiOptions } from '../types'
+import type { CdnOptions, ShikiOptions } from '../types'
 import { computed, ref, unref } from 'vue'
 import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, LANGUAGE_ALIAS } from '../constants'
-import { hasShiki, isClient } from '../utils'
+import { hasShikiModule, isClient } from '../utils'
+import { useCdnLoader } from './use-cdn-loader'
 
 interface UseShikiOptions {
   lang?: MaybeRef<string>
   shikiOptions?: MaybeRef<ShikiOptions | undefined>
+  cdnOptions?: CdnOptions
   isDark?: MaybeRef<boolean>
 }
 
@@ -22,6 +24,8 @@ let createHighlighterPromise: Promise<Highlighter> | null = null
 
 export function useShiki(options?: UseShikiOptions) {
   const installed = ref<boolean>(false)
+
+  const { getCdnShikiUrl, loadCdnShiki } = useCdnLoader({ cdnOptions: options?.cdnOptions })
 
   const lang = computed(() => unref(options?.lang) ?? 'plaintext')
 
@@ -39,13 +43,22 @@ export function useShiki(options?: UseShikiOptions) {
   })
   const codeToTokenOptions = computed(() => unref(options?.shikiOptions)?.codeToTokenOptions ?? {})
 
+  async function getShiki(): Promise<typeof import('shiki')> {
+    const module = await loadCdnShiki() ?? await import('shiki')
+    return module
+  }
+
+  async function hasShiki(): Promise<boolean> {
+    return getCdnShikiUrl() ? true : await hasShikiModule()
+  }
+
   async function getThemes() {
-    const { bundledThemesInfo } = await import('shiki')
+    const { bundledThemesInfo } = await getShiki()
     return [lightTheme.value, darkTheme.value].filter(theme => bundledThemesInfo.find(t => t.id === theme))
   }
 
   async function getDualTheme() {
-    const { bundledThemesInfo } = await import('shiki')
+    const { bundledThemesInfo } = await getShiki()
     return {
       light: bundledThemesInfo.find(t => t.id === lightTheme.value)?.id ?? DEFAULT_LIGHT_THEME,
       dark: bundledThemesInfo.find(t => t.id === darkTheme.value)?.id ?? DEFAULT_DARK_THEME,
@@ -56,7 +69,7 @@ export function useShiki(options?: UseShikiOptions) {
     if (langAlias.value[lang.value])
       return langAlias.value[lang.value] as BuiltinLanguage
 
-    const { bundledLanguagesInfo } = await import('shiki')
+    const { bundledLanguagesInfo } = await getShiki()
     const language = bundledLanguagesInfo.find(l => l.id === lang.value || l.aliases?.includes(lang.value))
 
     if (language)
@@ -90,7 +103,7 @@ export function useShiki(options?: UseShikiOptions) {
     }
 
     createHighlighterPromise = (async () => {
-      const { createHighlighter } = await import('shiki')
+      const { createHighlighter } = await getShiki()
       return createHighlighter({
         themes: await getThemes(),
         langs: langs.value,
@@ -138,6 +151,7 @@ export function useShiki(options?: UseShikiOptions) {
 
   return {
     installed,
+    getShiki,
     getHighlighter,
     codeToTokens,
     preload,

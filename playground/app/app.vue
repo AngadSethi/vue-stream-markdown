@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {
+  CdnOptions,
   CodeOptions,
   ControlsConfig,
   MermaidOptions,
@@ -111,6 +112,11 @@ const uiOptions = computed((): UIOptions => {
     hideTooltip: isMobile.value,
   }
 })
+
+const cdnOptions: CdnOptions = {
+  baseUrl: 'https://cdn.jsdelivr.net/npm/',
+  mermaid: 'umd',
+}
 
 const controlsConfig = computed((): ControlsConfig => {
   return {
@@ -298,7 +304,10 @@ onMounted(() => {
 
       <div
         ref="containerRef"
-        class="scrollbar-gutter-stable pr-4 h-full overflow-x-hidden overflow-y-auto"
+        class="pr-4 h-full overflow-x-hidden overflow-y-auto"
+        :style="{
+          scrollbarGutter: 'stable',
+        }"
         @scroll="onScroll"
       >
         <Markdown
@@ -306,14 +315,15 @@ onMounted(() => {
           class="my-4 flex flex-col gap-3"
           :mode="mode"
           :content="markdownContent"
+          :controls="controlsConfig"
+          :previewers="previewerConfig"
+          :node-renderers="nodeRenderers"
           :locale="locale"
           :shiki-options="shikiOptions"
           :code-options="codeOptions"
           :mermaid-options="mermaidOptions"
           :ui-options="uiOptions"
-          :controls="controlsConfig"
-          :previewers="previewerConfig"
-          :node-renderers="nodeRenderers"
+          :cdn-options="cdnOptions"
           :normalize="normalizeContent"
         />
       </div>
@@ -324,9 +334,3 @@ onMounted(() => {
     </template>
   </Layout>
 </template>
-
-<style>
-.scrollbar-gutter-stable {
-  scrollbar-gutter: stable;
-}
-</style>
