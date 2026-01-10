@@ -6,6 +6,7 @@ const codeBlockExample = `
 ${scriptTag}
 import { computed, ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import 'katex/dist/katex.min.css'
 import 'vue-stream-markdown/index.css'
 import 'vue-stream-markdown/theme.css'
 

@@ -30,13 +30,8 @@ export function useKatex() {
       return
 
     if (await hasKatex()) {
-      // Dynamically import CSS only in client environment
-      // Using a function to prevent Vite from analyzing this import during SSR
-      const loadCSS = async () => {
-        if (isClient())
-          await import('katex/dist/katex.min.css')
-      }
-      await loadCSS()
+      // Because katex.min.css is not included in the bundle, you need to import it manually.
+      // await import('katex/dist/katex.min.css')
     }
   }
 

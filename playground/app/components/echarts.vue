@@ -33,8 +33,8 @@ watch(
 
     try {
       // If you have a better solution, I’d love to hear from you.
-      // eslint-disable-next-line no-eval
-      data.value = eval(`(${code.value})`)
+      // eslint-disable-next-line no-new-func
+      data.value = new Function(`return ${code.value}`)()
       nextTick(() => {
         renderChart()
       })

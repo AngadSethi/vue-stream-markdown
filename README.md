@@ -39,10 +39,7 @@ pnpm add vue-stream-markdown
 
 > [!IMPORTANT]
 > 🚧 **vue-stream-markdown** is currently in active feature development.
->
-> Breaking changes are avoided as much as possible, but the project maintains a relatively high release frequency.
->
-> If a version meets your needs, you don't need to always follow the latest version.
+> From version `0.4.0` onwards, you need to manually include `katex.min.css`.
 
 For detailed usage and API documentation, please refer to the [Documentation](https://docs-vue-stream-markdown.netlify.app/).
 
@@ -50,6 +47,7 @@ For detailed usage and API documentation, please refer to the [Documentation](ht
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
+import 'katex/dist/katex.min.css'
 import 'vue-stream-markdown/index.css'
 // If you don't have shadcn CSS variables globally, import the theme
 import 'vue-stream-markdown/theme.css'
@@ -80,6 +78,7 @@ This project also uses and benefits from:
 - [medium-zoom](https://github.com/francoischalifour/medium-zoom) - Inspired the custom image zoom implementation
 - [markdown-sanitizers](https://github.com/vercel-labs/markdown-sanitizers) - URL validation and security hardening logic in `src/utils/harden.ts` is ported from `rehype-harden`
 - [Dify](https://github.com/langgenius/dify) - LaTeX preprocessing logic in `src/preprocess/vendored/markdown-utils.ts` is ported from Dify
+
 ## Acknowledgments
 
 I would like to express my sincere gratitude to those who provided guidance and support during the project selection phase and promotion phase of this project. Without their encouragement and support, I would not have been able to complete this work. In particular, the [streamdown](https://streamdown.ai/) community provided excellent code guidance and even helped fix several issues.

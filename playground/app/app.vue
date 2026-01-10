@@ -12,12 +12,16 @@ import type {
 import { throttle } from '@antfu/utils'
 import { useCycleList, useResizeObserver } from '@vueuse/core'
 import * as LZString from 'lz-string'
+import { hydrateOnVisible } from 'vue'
 import { Markdown, normalize, SUPPORT_LANGUAGES, useTailwindV3Theme } from 'vue-stream-markdown'
 import { ChartPie } from './icons'
 import { DEFAULT_MARKDOWN_PATH, getPresetContent } from './markdown'
 import { getContentFromUrl, removeUnclosedGithubTag } from './utils'
 
-const HtmlNodeRenderer = defineAsyncComponent(() => import('./components/html.vue'))
+const HtmlNodeRenderer = defineAsyncComponent({
+  loader: () => import('./components/html.vue'),
+  hydrate: hydrateOnVisible(),
+})
 
 const { cssVariables } = useTailwindV3Theme({})
 
@@ -121,7 +125,10 @@ const previewerConfig: PreviewerConfig = {
     echarts: true,
   },
   components: {
-    echarts: defineAsyncComponent(() => import('./components/echarts.vue')),
+    echarts: defineAsyncComponent({
+      loader: () => import('./components/echarts.vue'),
+      hydrate: hydrateOnVisible(),
+    }),
   },
 }
 
@@ -291,12 +298,12 @@ onMounted(() => {
 
       <div
         ref="containerRef"
-        class="scrollbar-gutter-stable pr-4 h-full overflow-auto"
+        class="scrollbar-gutter-stable pr-4 h-full overflow-x-hidden overflow-y-auto"
         @scroll="onScroll"
       >
         <Markdown
           ref="markdownRef"
-          class="flex flex-col gap-3"
+          class="my-4 flex flex-col gap-3"
           :mode="mode"
           :content="markdownContent"
           :locale="locale"
