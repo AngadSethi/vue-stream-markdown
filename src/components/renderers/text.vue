@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { TextNodeRendererProps } from '../../types'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 withDefaults(defineProps<TextNodeRendererProps>(), {})
 </script>
 
