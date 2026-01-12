@@ -34,11 +34,11 @@ const Error = computed(() => hardenOptions.value?.errorComponent ?? ErrorCompone
     target="_blank"
     :href="transformedUrl"
   >
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </a>
 
   <component :is="Error" v-else v-bind="props" variant="harden-link">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </component>
 </template>
 

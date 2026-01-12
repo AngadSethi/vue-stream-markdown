@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<EmphasisNodeRendererProps>(), {})
 
 <template>
   <em data-stream-markdown="emphasis">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </em>
 </template>
 

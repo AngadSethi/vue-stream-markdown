@@ -45,9 +45,11 @@ export interface NodeRendererProps extends StreamMarkdownContext {
   blocks?: SyntaxTree[]
   blockIndex?: number
   node: ParsedNode
+  parentNode?: ParsedNode
   prevNode?: ParsedNode
   nextNode?: ParsedNode
   nodeKey: string
+  deep: number
 }
 
 export interface BlockquoteNodeRendererProps extends NodeRendererProps {

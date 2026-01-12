@@ -133,10 +133,10 @@ function getNodes(cell: unknown) {
     <div data-stream-markdown="table-inner-wrapper">
       <Table ref="tableRef" :headers="headerCells" :rows="bodyRows" :get-align="getAlign">
         <template #header-cell="{ cell }">
-          <NodeList v-bind="props" :nodes="getNodes(cell)" />
+          <NodeList v-bind="props" :parent-node="node" :nodes="getNodes(cell)" :deep="deep + 1" />
         </template>
         <template #body-cell="{ cell }">
-          <NodeList v-bind="props" :nodes="getNodes(cell)" />
+          <NodeList v-bind="props" :parent-node="node" :nodes="getNodes(cell)" :deep="deep + 1" />
         </template>
       </Table>
     </div>

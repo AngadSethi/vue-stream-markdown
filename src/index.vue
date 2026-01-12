@@ -164,6 +164,7 @@ defineExpose({
         :get-container="getContainer"
         :node-key="`stream-markdown-block-${index}`"
         :is-dark="isDark"
+        :deep="0"
       />
     </template>
   </div>

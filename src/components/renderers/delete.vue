@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<DeleteNodeRendererProps>(), {})
 
 <template>
   <del data-stream-markdown="delete">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </del>
 </template>
 

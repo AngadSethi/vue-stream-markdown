@@ -12,7 +12,7 @@ const id = computed(() => `heading-${depth.value}`)
 
 <template>
   <component :is="tag" :data-stream-markdown="id">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :nodes="node.children" :deep="deep + 1" />
   </component>
 </template>
 

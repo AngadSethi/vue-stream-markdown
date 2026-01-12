@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<BlockquoteNodeRendererProps>(), {})
 
 <template>
   <blockquote data-stream-markdown="blockquote">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </blockquote>
 </template>
 

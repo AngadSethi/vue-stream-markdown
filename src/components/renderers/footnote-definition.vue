@@ -27,7 +27,7 @@ function scrollToReference() {
 <template>
   <a :id="`footnote-definition-${id}`" data-stream-markdown="footnote-definition">
     <span data-stream-markdown="footnote-definition-label">{{ title }}</span>
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" />
     <Button
       data-stream-markdown="footnote-definition-button"
       :name="t('button.back')"
@@ -46,6 +46,7 @@ function scrollToReference() {
 <style>
 :where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='footnote-definition'] {
+    display: block;
     color: var(--muted-foreground);
 
     & [data-stream-markdown='footnote-definition-label'] {

@@ -57,9 +57,11 @@ function getNodeComponent(node: ParsedNode) {
 function getNodeBindings(node: ParsedNode, index: number) {
   const prevNode = props.nodes[index - 1] || prevBlock.value?.children[prevBlock.value.children.length - 1]
   const nextNode = props.nodes[index + 1] || nextBlock.value?.children[0]
+
   return {
     ...props,
     node,
+    parentNode: props.parentNode,
     prevNode,
     nextNode,
     nodes: undefined,

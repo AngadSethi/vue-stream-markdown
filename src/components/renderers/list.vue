@@ -15,7 +15,7 @@ const id = computed(() => isTaskList.value
 
 <template>
   <component :is="tag" :data-stream-markdown="id">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </component>
 </template>
 
@@ -25,6 +25,7 @@ const id = computed(() => isTaskList.value
   & [data-stream-markdown='unordered-list'],
   & [data-stream-markdown='task-list'] {
     padding-left: 1.25rem;
+    line-height: 1.5;
     white-space: normal;
   }
 

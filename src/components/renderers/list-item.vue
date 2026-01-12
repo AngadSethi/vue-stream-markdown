@@ -18,10 +18,10 @@ const checked = computed(() => !!props.node.checked)
         :checked="checked"
         disabled
       >
-      <NodeList v-bind="props" :nodes="node.children" />
+      <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
     </p>
 
-    <NodeList v-else v-bind="props" :nodes="node.children" />
+    <NodeList v-else v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </li>
 </template>
 

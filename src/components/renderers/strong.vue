@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<StrongNodeRendererProps>(), {})
 
 <template>
   <strong data-stream-markdown="strong">
-    <NodeList v-bind="props" :nodes="node.children" />
+    <NodeList v-bind="props" :parent-node="node" :nodes="node.children" :deep="deep + 1" />
   </strong>
 </template>
 
