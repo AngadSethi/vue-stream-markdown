@@ -312,7 +312,7 @@ onMounted(() => {
       >
         <Markdown
           ref="markdownRef"
-          class="my-4 flex flex-col gap-3"
+          class="my-4"
           :mode="mode"
           :content="markdownContent"
           :controls="controlsConfig"

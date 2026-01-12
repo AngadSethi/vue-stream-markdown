@@ -9,6 +9,9 @@ defineOptions({
 
 const props = withDefaults(defineProps<NodeRendererListProps>(), {
   nodes: () => [],
+  parsedNodes: () => [],
+  blocks: () => [],
+  blockIndex: 0,
 })
 
 const { mode, enableAnimate } = useContext()
@@ -19,7 +22,26 @@ const enableTransition = computed(() => {
   return mode.value === 'streaming'
 })
 
-const nodes = computed(() => props.nodes?.map((node, index) => ({
+const prevBlock = computed(() => {
+  const find = (index: number) => {
+    const data = props.blocks?.[index]
+    if (data && !data.children.length)
+      return find(index - 1)
+    return data
+  }
+  return find(props.blockIndex - 1)
+})
+const nextBlock = computed(() => {
+  const find = (index: number) => {
+    const data = props.blocks?.[index]
+    if (data && !data.children.length)
+      return find(index + 1)
+    return data
+  }
+  return find(props.blockIndex + 1)
+})
+
+const nodes = computed(() => props.nodes.map((node, index) => ({
   node,
   index,
   key: getNodeKey(node, index),
@@ -32,8 +54,16 @@ function getNodeComponent(node: ParsedNode) {
   return props.nodeRenderers[node.type] || null
 }
 
-function getNodeBindings(node: ParsedNode) {
-  return { ...props, node, nodes: undefined }
+function getNodeBindings(node: ParsedNode, index: number) {
+  const prevNode = props.nodes[index - 1] || prevBlock.value?.children[prevBlock.value.children.length - 1]
+  const nextNode = props.nodes[index + 1] || nextBlock.value?.children[0]
+  return {
+    ...props,
+    node,
+    prevNode,
+    nextNode,
+    nodes: undefined,
+  }
 }
 
 function getNodeKey(node: ParsedNode, index: number) {
@@ -45,7 +75,7 @@ function getNodeKey(node: ParsedNode, index: number) {
 </script>
 
 <template>
-  <template v-for="item in nodes" :key="item.key">
+  <template v-for="(item, index) in nodes" :key="item.key">
     <Transition
       v-if="enableTransition && !excludeTransition.includes(item.node.type)"
       name="stream-markdown-typewriter"
@@ -53,7 +83,7 @@ function getNodeKey(node: ParsedNode, index: number) {
     >
       <component
         :is="getNodeComponent(item.node)"
-        v-bind="getNodeBindings(item.node)"
+        v-bind="getNodeBindings(item.node, index)"
         :node-key="item.key"
       />
     </Transition>
@@ -61,7 +91,7 @@ function getNodeKey(node: ParsedNode, index: number) {
     <component
       :is="getNodeComponent(item.node)"
       v-else
-      v-bind="getNodeBindings(item.node)"
+      v-bind="getNodeBindings(item.node, index)"
       :node-key="item.key"
     />
   </template>

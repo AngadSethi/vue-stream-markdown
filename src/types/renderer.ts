@@ -24,6 +24,7 @@ import type {
   ParagraphNode,
   ParsedNode,
   StrongNode,
+  SyntaxTree,
   TableCellNode,
   TableNode,
   TableRowNode,
@@ -40,7 +41,12 @@ export interface NodeRendererListProps extends Omit<NodeRendererProps, 'node' | 
 export interface NodeRendererProps extends StreamMarkdownContext {
   markdownParser: MarkdownParser
   nodeRenderers: NodeRenderers
+  parsedNodes?: ParsedNode[]
+  blocks?: SyntaxTree[]
+  blockIndex?: number
   node: ParsedNode
+  prevNode?: ParsedNode
+  nextNode?: ParsedNode
   nodeKey: string
 }
 
