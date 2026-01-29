@@ -2,7 +2,7 @@
   "name": "vue-stream-markdown",
   "type": "module",
   "version": "0.4.2",
-  "packageManager": "pnpm@10.28.1",
+  "packageManager": "pnpm@10.28.2",
   "description": "Streaming markdown output, Useful for text streams like LLM outputs.",
   "author": "jinghaihan",
   "license": "MIT",
@@ -124,9 +124,6 @@
     "vitepress": "catalog:docs",
     "vitest": "catalog:test",
     "vue-tsc": "catalog:tsc"
-  },
-  "resolutions": {
-    "vue": "catalog:frontend"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
