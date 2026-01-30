@@ -1,4 +1,14 @@
-import type { BuiltinPluginContext, FromMarkdownExtension, MarkdownParserOptions, MarkdownParserResult, MicromarkExtension, ParsedNode, PreprocessContext, SyntaxTree, ToMarkdownExtension } from './types'
+import type {
+  BuiltinPluginContext,
+  FromMarkdownExtension,
+  MarkdownParserOptions,
+  MarkdownParserResult,
+  MicromarkExtension,
+  ParsedNode,
+  PreprocessContext,
+  SyntaxTree,
+  ToMarkdownExtension,
+} from './types'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toMarkdown } from 'mdast-util-to-markdown'
 import QuickLRU from 'quick-lru'
@@ -77,9 +87,21 @@ export class MarkdownParser {
     const asts: SyntaxTree[] = []
     const contents: string[] = []
 
+    const postprocess = (ast: SyntaxTree, loading: boolean, markText: boolean = true) => {
+      // update the ast loading and
+      const updated = this.updateAstLoading(ast, loading)
+      if (!markText)
+        return updated
+
+      // mark the last text node
+      const marked = this.markLastTextNodeLoading(updated)
+      return marked
+    }
+
     for (let index = 0; index < blocks.length; index++) {
       const isLastBlock = index === blocks.length - 1
       let content = blocks[index]!
+
       // preprocess the last block
       if (isLastBlock)
         content = this.mode === 'streaming' ? pre(content, this.getPreprocessContext()) : content
@@ -90,15 +112,14 @@ export class MarkdownParser {
       // check if the ast is cached
       if (astCache.has(content)) {
         const ast = astCache.get(content)!
-        asts.push(this.updateAstLoading(ast, loading))
+        asts.push(postprocess(ast, loading, false))
         continue
       }
 
       const ast = this.markdownToAst(content)
       astCache.set(content, ast)
 
-      const resolvedAst = this.updateAstLoading(ast, loading)
-      asts.push(resolvedAst)
+      asts.push(postprocess(ast, loading))
     }
 
     this.asts = structuredClone(asts)
@@ -110,10 +131,20 @@ export class MarkdownParser {
     const node = findLastLeafNode(ast.children)
     if (!node)
       return ast
-    return this.cloneAstNode(ast, node, loading)
+    return this.updateNodeLoading(ast, node, loading)
   }
 
-  private cloneAstNode(
+  private markLastTextNodeLoading(ast: SyntaxTree) {
+    if (this.mode !== 'streaming')
+      return ast
+
+    const node = findLastLeafNode(ast.children)
+    if (!node || node.type !== 'text')
+      return ast
+    return this.updateNodeLoading(ast, node, true)
+  }
+
+  private updateNodeLoading(
     ast: SyntaxTree,
     targetNode: ParsedNode,
     loading: boolean,
