@@ -115,7 +115,7 @@
     "nuxt": "catalog:dev",
     "pncat": "catalog:cli",
     "quick-lru": "catalog:inline",
-    "shiki": "^3.21.0",
+    "shiki": "^3.22.0",
     "simple-git-hooks": "catalog:lint",
     "taze": "catalog:cli",
     "treechop": "catalog:inline",
